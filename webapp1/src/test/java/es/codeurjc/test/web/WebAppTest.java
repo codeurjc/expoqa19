@@ -15,10 +15,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class WebAppTest {
+
+	private static Logger LOG = LoggerFactory.getLogger(WebAppTest.class);
 
 	private static String sutURL;
 	private static String eusURL;
@@ -65,7 +69,7 @@ public class WebAppTest {
 	public void createMessageTest() throws InterruptedException {
 
 		driver.get(sutURL);
-		System.out.println("Web loaded");
+		LOG.info("Web loaded");
 		Thread.sleep(2000);
 
 		String newTitle = "MessageTitle";
@@ -78,7 +82,7 @@ public class WebAppTest {
 
 		assertThat(title).isEqualTo(newTitle);
 		assertThat(body).isEqualTo(newBody);
-		System.out.println("Message verified");
+		LOG.info("Message verified");
 
 		Thread.sleep(2000);
 	}
@@ -87,7 +91,7 @@ public class WebAppTest {
 	public void removeMessageTest() throws InterruptedException {
 
 		driver.get(sutURL);
-		System.out.println("Web loaded");
+		LOG.info("Web loaded");
 		Thread.sleep(2000);
 
 		String newTitle = "MessageTitleToBeDeleted";
@@ -96,14 +100,14 @@ public class WebAppTest {
 		addMessage(newTitle, newBody);
 
 		driver.findElement(By.id("delete")).click();
-		System.out.println("Delete button clicked");
+		LOG.info("Delete button clicked");
 		Thread.sleep(2000);
 
 		try {
 			driver.findElement(By.xpath("//span[contains(text(),'"+newTitle+"')]"));
 			fail("Message should be deleted");
 		} catch(Exception e){
-			System.out.println("Message deleted");	
+			LOG.info("Message deleted");	
 		}
 	}
 
@@ -111,12 +115,12 @@ public class WebAppTest {
 
 		driver.findElement(By.id("title-input")).sendKeys(title);
 		driver.findElement(By.id("body-input")).sendKeys(body);
-		System.out.println("Form ready");
+		LOG.info("Form ready");
 
 		Thread.sleep(2000);
 
 		driver.findElement(By.id("submit")).click();
-		System.out.println("Form submited");
+		LOG.info("Form submited");
 
 		Thread.sleep(2000);
 
