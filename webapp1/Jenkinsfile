@@ -28,7 +28,7 @@ pipeline {
  post {
     always {
       junit "webapp1/**/target/surefire-reports/TEST-*.xml"
-      sh "kill \$(cat webapp/target/pid)"
+      sh "kill \$(cat webapp1/target/pid)"
       archive "out.log"
     }
     success {
