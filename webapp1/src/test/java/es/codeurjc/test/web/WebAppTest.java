@@ -1,6 +1,7 @@
 package es.codeurjc.test.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
 
 import java.net.MalformedURLException;
@@ -61,35 +62,64 @@ public class WebAppTest {
 	}
 
 	@Test
-	public void test() throws InterruptedException {
+	public void createMessageTest() throws InterruptedException {
 
 		driver.get(sutURL);
 		System.out.println("Web loaded");
-		
+		Thread.sleep(2000);
+
 		String newTitle = "MessageTitle";
 		String newBody = "MessageBody";
 
-		Thread.sleep(2000);
-		
-		driver.findElement(By.id("title-input")).sendKeys(newTitle);
-		driver.findElement(By.id("body-input")).sendKeys(newBody);
-		System.out.println("Form ready");
+		addMessage(newTitle, newBody);
 
-		Thread.sleep(2000);
-		
-		driver.findElement(By.id("submit")).click();
-		System.out.println("Form submited");
-
-		Thread.sleep(2000);
-		
 		String title = driver.findElement(By.id("title")).getText();
 		String body = driver.findElement(By.id("body")).getText();
 
 		assertThat(title).isEqualTo(newTitle);
 		assertThat(body).isEqualTo(newBody);
 		System.out.println("Message verified");
-		
+
 		Thread.sleep(2000);
+	}
+
+	@Test
+	public void removeMessageTest() throws InterruptedException {
+
+		driver.get(sutURL);
+		System.out.println("Web loaded");
+		Thread.sleep(2000);
+
+		String newTitle = "MessageTitleToBeDeleted";
+		String newBody = "MessageBodyToBeDeleted";
+
+		addMessage(newTitle, newBody);
+
+		driver.findElement(By.id("delete")).click();
+		System.out.println("Delete button clicked");
+		Thread.sleep(2000);
+
+		try {
+			driver.findElement(By.xpath("//span[contains(text(),'"+newTitle+"')]"));
+			fail("Message should be deleted");
+		} catch(Exception e){
+			System.out.println("Message deleted");	
+		}
+	}
+
+	private void addMessage(String title, String body) throws InterruptedException {
+
+		driver.findElement(By.id("title-input")).sendKeys(title);
+		driver.findElement(By.id("body-input")).sendKeys(body);
+		System.out.println("Form ready");
+
+		Thread.sleep(2000);
+
+		driver.findElement(By.id("submit")).click();
+		System.out.println("Form submited");
+
+		Thread.sleep(2000);
+
 	}
 
 }
