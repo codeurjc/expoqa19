@@ -11,7 +11,7 @@ pipeline {
    }
    stage("Create jar") {
        steps {
-           sh "cd webapp1; mvn package"
+           sh "cd webapp1; mvn package -DskipTests=true"
        }
    }
    stage("Start app") {
@@ -21,7 +21,7 @@ pipeline {
    }
    stage("Test") {
      steps {
-       sh "cd webapp1; mvn verify"
+       sh "cd webapp1; mvn test"
      }
    }
  } 
