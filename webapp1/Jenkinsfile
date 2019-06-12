@@ -16,12 +16,11 @@ pipeline {
    }
    stage("Start app") {
     steps {
-     sh "java -jar webapp1/target/webapp1-0.0.1-SNAPSHOT.jar > out.log & echo \$! > pid"
+     sh "java -jar webapp1/target/webapp1-0.0.1-SNAPSHOT.jar --server.port=9000 > out.log & echo \$! > pid"
     }
    }
    stage("Test") {
      steps {
-       sleep 10
        sh "cd webapp1; mvn verify"
      }
    }
