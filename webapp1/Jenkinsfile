@@ -21,6 +21,7 @@ pipeline {
    }
    stage("Test") {
      steps {
+       sleep 20000
        sh "cd webapp1; mvn verify"
      }
    }
