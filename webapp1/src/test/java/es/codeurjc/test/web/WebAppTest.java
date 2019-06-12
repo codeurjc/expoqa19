@@ -64,7 +64,8 @@ public class WebAppTest {
 	public void test() throws InterruptedException {
 
 		driver.get(sutURL);
-
+		System.out.println("Web loaded");
+		
 		String newTitle = "MessageTitle";
 		String newBody = "MessageBody";
 
@@ -72,10 +73,12 @@ public class WebAppTest {
 		
 		driver.findElement(By.id("title-input")).sendKeys(newTitle);
 		driver.findElement(By.id("body-input")).sendKeys(newBody);
+		System.out.println("Form ready");
 
 		Thread.sleep(2000);
 		
 		driver.findElement(By.id("submit")).click();
+		System.out.println("Form submited");
 
 		Thread.sleep(2000);
 		
@@ -84,6 +87,7 @@ public class WebAppTest {
 
 		assertThat(title).isEqualTo(newTitle);
 		assertThat(body).isEqualTo(newBody);
+		System.out.println("Message verified");
 		
 		Thread.sleep(2000);
 	}
