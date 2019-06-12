@@ -27,6 +27,8 @@ public class MessageController {
 
 		messages.add(message);
 
+		System.out.println("Message "+message+" added");
+
 		return "redirect:/";
 	}
 
