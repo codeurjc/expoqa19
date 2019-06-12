@@ -43,8 +43,8 @@ pipeline {
       
         sh "docker-compose down"
       
-        junit "webapp2/**/target/*-reports/TEST-*.xml"
-        
+        junit "target/*-reports/TEST-*.xml"
+
       }
     }
     success {
