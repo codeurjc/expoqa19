@@ -11,28 +11,44 @@ pipeline {
    }
    stage("Create jar") {
        steps {
-           sh "cd webapp1; mvn package -DskipTests=true"
+           sh "cd webapp2; docker-compose build"
        }
    }
    stage("Start app") {
     steps {
-     sh "java -jar webapp1/target/webapp1-0.0.1-SNAPSHOT.jar > out.log & echo \$! > pid"
+     sh "cd webapp2; docker-compose up -d"
     }
    }
    stage("Test") {
      steps {
-       sh "cd webapp1; mvn test"
+       sh "cd webapp2; mvn test"
      }
    }
  } 
  post {
     always {
-      sh "kill \$(cat pid)"
-      archive "out.log"
-      junit "webapp1/**/target/*-reports/TEST-*.xml"
+
+      ws("webapp2") {
+
+        sh "docker-compose logs"
+      
+        sh "docker-compose logs > all-logs.txt"
+        archive "webapp2/all-logs.txt"
+      
+        sh "docker-compose logs web > web-logs.txt"
+        archive "webapp2/web-logs.txt"
+      
+        sh "docker-compose logs db > db-logs.txt"
+        archive "webapp2/db-logs.txt"
+      
+        sh "docker-compose down"
+      
+        junit "webapp2/**/target/*-reports/TEST-*.xml"
+        
+      }
     }
     success {
-      archive "webapp1/target/*.jar"
+      archive "webapp2/target/*.jar"
     }
  }
 }
