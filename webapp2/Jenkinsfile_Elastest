@@ -1,30 +1,31 @@
 node {
   elastest(tss: ['EUS'], surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml', monitoring: true, project: 'ExpoQA19') {
-     stages {
+     def appIp = ''
+     try {
        stage("Preparation") { 
-         steps {
-           git 'https://github.com/codeurjc/expoqa19.git'
-         }
+         git 'https://github.com/codeurjc/expoqa19.git'
        }
        stage("Create jar") {
-           steps {
-               sh "cd webapp2; docker-compose build"
-           }
+         sh "cd webapp2; docker-compose build"
        }
        stage("Start app") {
-        steps {
-         sh "cd webapp2; docker-compose up -p ${env.ET_SUT_CONTAINER_NAME} -d"
-        }
+         sh "cd webapp2; docker-compose -p ${env.ET_SUT_CONTAINER_NAME} up -d"
+         sh "sleep 2"
        }
+       stage("Get app ip") {
+         def appContainerName = env.ET_SUT_CONTAINER_NAME + "_web_1";
+         def appNetwork = getFirstNetwork(appContainerName)
+         appIp = containerIp(appContainerName, appNetwork)
+       }       
        stage("Test") {
-         steps {
-           sh "cd webapp2; mvn test"
+         withEnv(['ET_SUT_HOST=' + appIp]) {
+            sh "cd webapp2; mvn test"
          }
        }
-     } 
-     post {
-      always {
-    
+     } catch(e){
+        echo 'Err: ' + e.toString()
+     } finally {
+        sh "echo finally block"
         sh "cd webapp2; docker-compose logs"
           
         sh "cd webapp2; docker-compose logs > all-logs.txt"
@@ -36,10 +37,32 @@ node {
         sh "cd webapp2; docker-compose logs db > db-logs.txt"
         archive "webapp2/db-logs.txt"
           
-        sh "cd webapp2; docker-compose down"
+        sh "cd webapp2; docker-compose -p ${env.ET_SUT_CONTAINER_NAME} down"
           
         junit "webapp2/target/*-reports/TEST-*.xml"
-      }
      }
   }
  }
+ 
+ 
+def getFirstNetwork(containerName) {
+    echo "Inside getFirstNetwork function"
+    network = sh (
+        script: "docker inspect " + containerName + " -f \"{{json .NetworkSettings.Networks}}\" | awk \"{sub(/:.*/,\\\"\\\")}1\" | awk \"{sub(/\\\"/,\\\"\\\")}1\" | awk \"{sub(/\\\"/,\\\"\\\")}1\" | awk \"{sub(/{/,\\\"\\\")}1\"",
+        returnStdout: true
+    ).trim()
+    
+    echo containerName+" Network = " + network;
+    return network;
+}
+
+def containerIp(containerName, network) {
+    echo "Inside containerIp function"
+    containerIp = sh (
+        script: "docker inspect --format=\"{{.NetworkSettings.Networks." + network + ".IPAddress}}\" "+ containerName,
+        returnStdout: true
+    ).trim()
+    
+    echo containerName+" IP = " + containerIp;
+    return containerIp;
+}
