@@ -7,7 +7,7 @@ node {
            sh "cd webapp2; docker build . -t expoqa19/webapp2:v1"
        }
        stage("Start app") {
-           sh "cd webapp2/k8s; kubectl create . -f"
+           sh "cd webapp2/k8s; kubectl create -f ."
        }
        stage("Test") {
            sh "cd webapp2; mvn test"
@@ -26,7 +26,7 @@ node {
         sh "cd webapp2; docker-compose logs db > db-logs.txt"
         archive "webapp2/db-logs.txt"*/
           
-        sh "cd webapp2/k8s; kubectl delete . -f"
+        sh "cd webapp2/k8s; kubectl delete -f ."
           
         junit "webapp2/target/*-reports/TEST-*.xml"
     }
