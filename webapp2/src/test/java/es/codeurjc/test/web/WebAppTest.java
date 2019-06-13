@@ -18,6 +18,7 @@ import org.junit.rules.TestName;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +64,11 @@ public class WebAppTest {
             // Local Google Chrome
             driver = new ChromeDriver();
         } else {
+            DesiredCapabilities caps = chrome();
+            caps.setCapability("testName", testName);
+
             // Selenium Grid in ElasTest
-            driver = new RemoteWebDriver(new URL(eusURL), chrome());
+            driver = new RemoteWebDriver(new URL(eusURL), caps);
         }
     }
 
