@@ -1,6 +1,5 @@
 node {
   elastest(tss: ['EUS'], surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml', monitoring: true, project: 'ExpoQA19') {
-     agent any
      stages {
        stage("Preparation") { 
          steps {
