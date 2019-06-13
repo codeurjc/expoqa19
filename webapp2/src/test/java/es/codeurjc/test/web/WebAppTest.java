@@ -83,10 +83,10 @@ public class WebAppTest {
 
     @Test
     public void createMessageTest() throws InterruptedException {
-
+        Thread.sleep(1000);
         driver.get(sutURL);
         LOG.info("Web loaded");
-        Thread.sleep(2000);
+        Thread.sleep(3000);
 
         String newTitle = "MessageTitle";
         String newBody = "MessageBody";
