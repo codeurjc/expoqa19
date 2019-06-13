@@ -1,8 +1,10 @@
 package es.codeurjc.test.web;
 
+import static java.lang.invoke.MethodHandles.lookup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,7 +12,9 @@ import java.net.URL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -21,109 +25,119 @@ import org.slf4j.LoggerFactory;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class WebAppTest {
+    @Rule
+    public TestName name = new TestName();
+    protected final Logger logger = getLogger(lookup().lookupClass());
 
-	private static Logger LOG = LoggerFactory.getLogger(WebAppTest.class);
+    private static Logger LOG = LoggerFactory.getLogger(WebAppTest.class);
 
-	private static String sutURL;
-	private static String eusURL;
+    private static String sutURL;
+    private static String eusURL;
 
-	private WebDriver driver;
+    private WebDriver driver;
 
-	@BeforeClass
-	public static void setupClass() {
+    @BeforeClass
+    public static void setupClass() {
 
-		String sutHost = System.getenv("ET_SUT_HOST");
-		if (sutHost == null) {
-			sutURL = "http://localhost:8080/";
-		} else {
-			sutURL = "http://" + sutHost + ":8080/";
-		}
-		System.out.println("App url: " + sutURL);
+        String sutHost = System.getenv("ET_SUT_HOST");
+        if (sutHost == null) {
+            sutURL = "http://localhost:8080/";
+        } else {
+            sutURL = "http://" + sutHost + ":8080/";
+        }
+        System.out.println("App url: " + sutURL);
 
-		eusURL = System.getenv("ET_EUS_API");
-		if (eusURL == null) {
-			WebDriverManager.chromedriver().setup();
-		}
-	}
+        eusURL = System.getenv("ET_EUS_API");
+        if (eusURL == null) {
+            WebDriverManager.chromedriver().setup();
+        }
+    }
 
-	@Before
-	public void setupTest() throws MalformedURLException {
-		String eusURL = System.getenv("ET_EUS_API");
-		if (eusURL == null) {
-			// Local Google Chrome
-			driver = new ChromeDriver();
-		} else {
-			// Selenium Grid in ElasTest
-			driver = new RemoteWebDriver(new URL(eusURL), chrome());
-		}
-	}
+    @Before
+    public void setupTest() throws MalformedURLException {
+        String testName = name.getMethodName();
+        logger.info("##### Start test: {}", testName);
 
-	@After
-	public void teardown() {
-		if (driver != null) {
-			driver.quit();
-		}
-	}
+        String eusURL = System.getenv("ET_EUS_API");
+        if (eusURL == null) {
+            // Local Google Chrome
+            driver = new ChromeDriver();
+        } else {
+            // Selenium Grid in ElasTest
+            driver = new RemoteWebDriver(new URL(eusURL), chrome());
+        }
+    }
 
-	@Test
-	public void createMessageTest() throws InterruptedException {
+    @After
+    public void teardown() {
+        if (driver != null) {
+            driver.quit();
+        }
+        String testName = name.getMethodName();
+        logger.info("##### Finish test: {}", testName);
+    }
 
-		driver.get(sutURL);
-		LOG.info("Web loaded");
-		Thread.sleep(2000);
+    @Test
+    public void createMessageTest() throws InterruptedException {
 
-		String newTitle = "MessageTitle";
-		String newBody = "MessageBody";
+        driver.get(sutURL);
+        LOG.info("Web loaded");
+        Thread.sleep(2000);
 
-		addMessage(newTitle, newBody);
+        String newTitle = "MessageTitle";
+        String newBody = "MessageBody";
 
-		String title = driver.findElement(By.id("title")).getText();
-		String body = driver.findElement(By.id("body")).getText();
+        addMessage(newTitle, newBody);
 
-		assertThat(title).isEqualTo(newTitle);
-		assertThat(body).isEqualTo(newBody);
-		LOG.info("Message verified");
+        String title = driver.findElement(By.id("title")).getText();
+        String body = driver.findElement(By.id("body")).getText();
 
-		Thread.sleep(2000);
-	}
+        assertThat(title).isEqualTo(newTitle);
+        assertThat(body).isEqualTo(newBody);
+        LOG.info("Message verified");
 
-	@Test
-	public void removeMessageTest() throws InterruptedException {
+        Thread.sleep(2000);
+    }
 
-		driver.get(sutURL);
-		LOG.info("Web loaded");
-		Thread.sleep(2000);
+    @Test
+    public void removeMessageTest() throws InterruptedException {
 
-		String newTitle = "MessageTitleToBeDeleted";
-		String newBody = "MessageBodyToBeDeleted";
+        driver.get(sutURL);
+        LOG.info("Web loaded");
+        Thread.sleep(2000);
 
-		addMessage(newTitle, newBody);
+        String newTitle = "MessageTitleToBeDeleted";
+        String newBody = "MessageBodyToBeDeleted";
 
-		driver.findElement(By.id("delete")).click();
-		LOG.info("Delete button clicked");
-		Thread.sleep(2000);
+        addMessage(newTitle, newBody);
 
-		try {
-			driver.findElement(By.xpath("//span[contains(text(),'"+newTitle+"')]"));
-			fail("Message should be deleted");
-		} catch(Exception e){
-			LOG.info("Message deleted");	
-		}
-	}
+        driver.findElement(By.id("delete")).click();
+        LOG.info("Delete button clicked");
+        Thread.sleep(2000);
 
-	private void addMessage(String title, String body) throws InterruptedException {
+        try {
+            driver.findElement(
+                    By.xpath("//span[contains(text(),'" + newTitle + "')]"));
+            fail("Message should be deleted");
+        } catch (Exception e) {
+            LOG.info("Message deleted");
+        }
+    }
 
-		driver.findElement(By.id("title-input")).sendKeys(title);
-		driver.findElement(By.id("body-input")).sendKeys(body);
-		LOG.info("Form ready");
+    private void addMessage(String title, String body)
+            throws InterruptedException {
 
-		Thread.sleep(2000);
+        driver.findElement(By.id("title-input")).sendKeys(title);
+        driver.findElement(By.id("body-input")).sendKeys(body);
+        LOG.info("Form ready");
 
-		driver.findElement(By.id("submit")).click();
-		LOG.info("Form submited");
+        Thread.sleep(2000);
 
-		Thread.sleep(2000);
+        driver.findElement(By.id("submit")).click();
+        LOG.info("Form submited");
 
-	}
+        Thread.sleep(2000);
+
+    }
 
 }
