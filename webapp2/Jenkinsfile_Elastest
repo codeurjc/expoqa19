@@ -1,6 +1,5 @@
 node {
   elastest(tss: ['EUS'], surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml', monitoring: true, project: 'ExpoQA19') {
-     def appIp = ''
      try {
        stage("Preparation") { 
          git 'https://github.com/codeurjc/expoqa19.git'
@@ -10,17 +9,10 @@ node {
        }
        stage("Start app") {
          sh "cd webapp2; docker-compose -p ${env.ET_SUT_CONTAINER_NAME} up -d"
-         sh "sleep 2"
+         sh "sleep 5"
        }
-       stage("Get app ip") {
-         def appContainerName = env.ET_SUT_CONTAINER_NAME + "_web_1";
-         def appNetwork = getFirstNetwork(appContainerName)
-         appIp = containerIp(appContainerName, appNetwork)
-       }       
        stage("Test") {
-         withEnv(['ET_SUT_HOST=' + appIp]) {
-            sh "cd webapp2; mvn test"
-         }
+         sh "cd webapp2; mvn test" 
        }
      } catch(e){
         echo 'Err: ' + e.toString()
@@ -42,27 +34,4 @@ node {
         junit "webapp2/target/*-reports/TEST-*.xml"
      }
   }
- }
- 
- 
-def getFirstNetwork(containerName) {
-    echo "Inside getFirstNetwork function"
-    network = sh (
-        script: "docker inspect " + containerName + " -f \"{{json .NetworkSettings.Networks}}\" | awk \"{sub(/:.*/,\\\"\\\")}1\" | awk \"{sub(/\\\"/,\\\"\\\")}1\" | awk \"{sub(/\\\"/,\\\"\\\")}1\" | awk \"{sub(/{/,\\\"\\\")}1\"",
-        returnStdout: true
-    ).trim()
-    
-    echo containerName+" Network = " + network;
-    return network;
-}
-
-def containerIp(containerName, network) {
-    echo "Inside containerIp function"
-    containerIp = sh (
-        script: "docker inspect --format=\"{{.NetworkSettings.Networks." + network + ".IPAddress}}\" "+ containerName,
-        returnStdout: true
-    ).trim()
-    
-    echo containerName+" IP = " + containerIp;
-    return containerIp;
 }
