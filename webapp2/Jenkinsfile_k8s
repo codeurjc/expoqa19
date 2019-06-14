@@ -14,16 +14,15 @@ node {
        } 
     } catch(e){
         echo 'Err: ' + e.toString()
-    } finally {
-       /* sh "cd webapp2; docker-compose logs"
+    } finally {       
+
+        sh "kubectl logs $(kubectl get pods | grep web | awk '{print $1}')"
+        sh "kubectl logs $(kubectl get pods | grep db-deploy | awk '{print $1}')"
+
+        sh "cd webapp2/k8s; kubectl logs $(kubectl get pods | grep web | awk '{print $1}') > web-logs.txt"
+        archive "webapp2/k8s/web-logs.txt"
           
-        sh "cd webapp2; docker-compose logs > all-logs.txt"
-        archive "webapp2/all-logs.txt"
-          
-        sh "cd webapp2; docker-compose logs web > web-logs.txt"
-        archive "webapp2/web-logs.txt"
-          
-        sh "cd webapp2; docker-compose logs db > db-logs.txt"
+        sh "cd webapp2/k8s; kubectl logs $(kubectl get pods | grep db-deploy | awk '{print $1}') > db-logs.txt"
         archive "webapp2/db-logs.txt"*/
           
         sh "cd webapp2/k8s; kubectl delete -f ."
