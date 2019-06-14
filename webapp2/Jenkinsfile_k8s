@@ -7,7 +7,14 @@ node {
            sh "cd webapp2; docker build . -t expoqa19/webapp2:v1"
        }
        stage("Start app") {
-           sh "cd webapp2/k8s; kubectl create -f ."
+           withKubeConfig([credentialsId: 'minikube_token',
+        //            caCertificate: '/home/ubuntu/.minikube/ca.crt',
+                    //serverUrl: 'https://18.200.79.187:8443'
+                    serverUrl: 'https://localhost:8443'
+                    ]) {
+                         sh 'cd webapp2/k8s; kubectl delete -f .'
+                         sh "cd webapp2/k8s; kubectl create -f ."
+                        }
        }
        stage("Test") {
            sh "cd webapp2; mvn test"
@@ -15,17 +22,19 @@ node {
     } catch(e){
         echo 'Err: ' + e.toString()
     } finally {       
+        withKubeConfig([credentialsId: 'minikube_token', serverUrl: 'https://localhost:8443']) {
 
-        sh 'kubectl logs $(kubectl get pods | grep web | awk "{print $1}")'
-        sh 'kubectl logs $(kubectl get pods | grep db-deploy | awk "{print $1}")'
-
-        sh 'cd webapp2/k8s; kubectl logs $(kubectl get pods | grep web | awk "{print $1}") > web-logs.txt'
-        archive "webapp2/k8s/web-logs.txt"
+           /* sh 'kubectl logs $(kubectl get pods | grep web | awk "{print $1}")'
+            sh 'kubectl logs $(kubectl get pods | grep db-deploy | awk "{print $1}")'
+    
+            sh 'cd webapp2/k8s; kubectl logs $(kubectl get pods | grep web | awk "{print $1}") > web-logs.txt'
+            archive "webapp2/k8s/web-logs.txt"
+              
+            sh 'cd webapp2/k8s; kubectl logs $(kubectl get pods | grep db-deploy | awk "{print $1}") > db-logs.txt'
+            archive "webapp2/db-logs.txt"*/
           
-        sh 'cd webapp2/k8s; kubectl logs $(kubectl get pods | grep db-deploy | awk "{print $1}") > db-logs.txt'
-        archive "webapp2/db-logs.txt"*/
-          
-        sh 'cd webapp2/k8s; kubectl delete -f .''
+            sh 'cd webapp2/k8s; kubectl delete -f .'
+        }
           
         junit "webapp2/target/*-reports/TEST-*.xml"
     }
