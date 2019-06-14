@@ -7,7 +7,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: db
-  name: db
+  name: db-deploy
 spec:
   replicas: 1
   strategy: {}
