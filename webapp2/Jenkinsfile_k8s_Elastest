@@ -1,1 +1,44 @@
-Jenkinsfile_k8s_Elastest
+node {
+  elastest(tss: ['EUS'], surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml', monitoring: true, project: 'ExpoQA19') {
+     try {
+       stage("Preparation") { 
+        git(
+             url: 'https://github.com/codeurjc/expoqa19.git',
+             branch: "${BRANCH}"
+         )
+       }
+       stage("Create jar") {
+           sh "cd webapp2; docker build . -t expoqa19/webapp2:v1"
+       }
+       stage("Start app") {
+           withKubeConfig([credentialsId: 'minikube_token',
+                    serverUrl: 'https://localhost:8443'
+                    ]) {
+                         sh "cd webapp2/k8s; kubectl create -f ."
+                        }
+       }
+       stage("Test") {
+           sleep 7 ///Waiting for the app to be ready
+           sh "cd webapp2; mvn test"
+       } 
+    } catch(e){
+        echo 'Err: ' + e.toString()
+    } finally {       
+        withKubeConfig([credentialsId: 'minikube_token', serverUrl: 'https://localhost:8443']) {
+
+           /* sh 'kubectl logs $(kubectl get pods | grep web | awk "{print $1}")'
+            sh 'kubectl logs $(kubectl get pods | grep db-deploy | awk "{print $1}")'
+    
+            sh 'cd webapp2/k8s; kubectl logs $(kubectl get pods | grep web | awk "{print $1}") > web-logs.txt'
+            archive "webapp2/k8s/web-logs.txt"
+              
+            sh 'cd webapp2/k8s; kubectl logs $(kubectl get pods | grep db-deploy | awk "{print $1}") > db-logs.txt'
+            archive "webapp2/db-logs.txt"*/
+          
+            sh 'cd webapp2/k8s; kubectl delete -f .'
+        }
+          
+        junit "webapp2/target/*-reports/TEST-*.xml"
+    }
+  }
+}
