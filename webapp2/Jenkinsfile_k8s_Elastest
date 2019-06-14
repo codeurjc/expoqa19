@@ -8,10 +8,10 @@ node {
          )
        }
        stage("Replace web app name to sut-XYZ"){
-            sh "cd webapp2/k8s; sed -i 's/name: web/name: ${env.ET_SUT_CONTAINER_NAME}/g' web-deployment.yaml"
+            sh "cd webapp2/k8s; sed -i 's/name: web/name: ${env.ET_SUT_CONTAINER_NAME}-web/g' web-deployment.yaml"
             sh "cd webapp2/k8s; sed -i 's/sut_/sut-/g' web-deployment.yaml"
             sh "cd webapp2/k8s; cat web-deployment.yaml"
-            sh "cd webapp2/k8s; sed -i 's/name: web/name: ${env.ET_SUT_CONTAINER_NAME}/g' web-service.yaml"
+            sh "cd webapp2/k8s; sed -i 's/name: web/name: ${env.ET_SUT_CONTAINER_NAME}-web/g' web-service.yaml"
             sh "cd webapp2/k8s; sed -i 's/sut_/sut-/g' web-service.yaml"
             sh "cd webapp2/k8s; cat web-service.yaml"
        }
