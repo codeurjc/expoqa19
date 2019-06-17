@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: es.codeurjc.test.web.WebAppTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 19.956 s <<< FAILURE! - in es.codeurjc.test.web.WebAppTest
+removeMessageTest(es.codeurjc.test.web.WebAppTest)  Time elapsed: 9.251 s  <<< FAILURE!
+java.lang.AssertionError: Message should be deleted
+	at es.codeurjc.test.web.WebAppTest.removeMessageTest(WebAppTest.java:108)
+
