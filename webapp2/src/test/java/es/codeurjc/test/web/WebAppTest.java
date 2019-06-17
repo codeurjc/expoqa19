@@ -1,8 +1,9 @@
 package es.codeurjc.test.web;
 
+import static io.github.bonigarcia.seljup.BrowserType.CHROME;
 import static java.lang.invoke.MethodHandles.lookup;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -11,24 +12,23 @@ import java.net.URL;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import io.github.bonigarcia.seljup.DockerBrowser;
+import io.github.bonigarcia.seljup.SeleniumExtension;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
 
+@ExtendWith(SeleniumExtension.class)
 public class WebAppTest {
-    protected final Logger logger = getLogger(lookup().lookupClass());
-
-    private static Logger LOG = LoggerFactory.getLogger(WebAppTest.class);
-
+    protected final static Logger LOG = getLogger(lookup().lookupClass());
+    
     private static String sutURL;
     private static String eusURL;
 
@@ -43,23 +43,23 @@ public class WebAppTest {
         } else {
             sutURL = "http://" + sutHost + ":38080/";
         }
-        System.out.println("App url: " + sutURL);
+        LOG.info("App url: " + sutURL);
 
         eusURL = System.getenv("ET_EUS_API");
         if (eusURL == null) {
-            WebDriverManager.chromedriver().setup();
+            ChromeDriverManager.chromedriver().setup();
         }
     }
 
-    @BeforeEach
-    public void setupTest(TestInfo info) throws MalformedURLException {
+    public void setupTest(WebDriver localDriver, TestInfo info)
+            throws MalformedURLException {
         String testName = info.getTestMethod().get().getName();
-        logger.info("##### Start test: {}", testName);
+        LOG.info("##### Start test: {}", testName);
 
         String eusURL = System.getenv("ET_EUS_API");
         if (eusURL == null) {
-            // Local Google Chrome
-            driver = new ChromeDriver();
+            // Local Dockerized Google Chrome
+            driver = localDriver;
         } else {
             DesiredCapabilities caps = chrome();
             caps.setCapability("testName", testName);
@@ -75,11 +75,15 @@ public class WebAppTest {
             driver.quit();
         }
         String testName = info.getTestMethod().get().getName();
-        logger.info("##### Finish test: {}", testName);
+        LOG.info("##### Finish test: {}", testName);
     }
 
     @Test
-    public void createMessageTest() throws InterruptedException {
+    public void testCreateMessage(
+            @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
+            TestInfo info) throws InterruptedException, MalformedURLException {
+        setupTest(localDriver, info);
+
         Thread.sleep(1000);
         driver.get(sutURL);
         LOG.info("Web loaded");
@@ -93,15 +97,18 @@ public class WebAppTest {
         String title = driver.findElement(By.id("title")).getText();
         String body = driver.findElement(By.id("body")).getText();
 
-        assertThat(title).isEqualTo(newTitle);
-        assertThat(body).isEqualTo(newBody);
+        assertEquals(newTitle, title);
+        assertEquals(newBody, body);
         LOG.info("Message verified");
 
         Thread.sleep(2000);
     }
 
     @Test
-    public void removeMessageTest() throws InterruptedException {
+    public void testRemoveMessage(
+            @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
+            TestInfo info) throws InterruptedException, MalformedURLException {
+        setupTest(localDriver, info);
 
         driver.get(sutURL);
         LOG.info("Web loaded");
