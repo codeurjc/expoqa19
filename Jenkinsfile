@@ -17,8 +17,6 @@ node {
        stage("Test") {
          sh "mvn test" 
        }
-     } catch(e){
-        echo 'Err: ' + e.toString()
      } finally {          
         sh "docker-compose -p ${env.ET_SUT_CONTAINER_NAME} down"
         junit "target/*-reports/TEST-*.xml"
