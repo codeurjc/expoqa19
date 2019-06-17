@@ -2,19 +2,18 @@ package es.codeurjc.test.web;
 
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -26,8 +25,6 @@ import org.slf4j.LoggerFactory;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class WebAppTest {
-    @Rule
-    public TestName name = new TestName();
     protected final Logger logger = getLogger(lookup().lookupClass());
 
     private static Logger LOG = LoggerFactory.getLogger(WebAppTest.class);
@@ -37,7 +34,7 @@ public class WebAppTest {
 
     private WebDriver driver;
 
-    @BeforeClass
+    @BeforeAll
     public static void setupClass() {
 
         String sutHost = System.getenv("ET_SUT_HOST");
@@ -54,9 +51,9 @@ public class WebAppTest {
         }
     }
 
-    @Before
-    public void setupTest() throws MalformedURLException {
-        String testName = name.getMethodName();
+    @BeforeEach
+    public void setupTest(TestInfo info) throws MalformedURLException {
+        String testName = info.getTestMethod().get().getName();
         logger.info("##### Start test: {}", testName);
 
         String eusURL = System.getenv("ET_EUS_API");
@@ -72,12 +69,12 @@ public class WebAppTest {
         }
     }
 
-    @After
-    public void teardown() {
+    @AfterEach
+    public void teardown(TestInfo info) {
         if (driver != null) {
             driver.quit();
         }
-        String testName = name.getMethodName();
+        String testName = info.getTestMethod().get().getName();
         logger.info("##### Finish test: {}", testName);
     }
 
