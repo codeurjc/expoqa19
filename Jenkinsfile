@@ -8,22 +8,19 @@ node {
                         branch: "${BRANCH}"
                         )
                 }
-                stage("Add SUT prefix"){
-                    sh "./addSutPrefix.sh"                    
-                }
                 stage("Create jar") {
                     sh "docker build . -t expoqa19/webapp2:v1"
                 }
                 stage("Start app") {
-                    sh "cd k8s; kubectl create -f ."
+                    sh "./addSutPrefix.sh"
+                    sh "kubectl create -f k8s/"
                 }
                 stage("Test") {
                     sh "mvn test"
                 }
-            } catch(e){
-                echo 'Err: ' + e.toString()
+            
             } finally {
-                sh 'cd k8s; kubectl delete -f .'
+                sh 'kubectl delete -f k8s/'
                 junit "target/*-reports/TEST-*.xml"
             }
         }
