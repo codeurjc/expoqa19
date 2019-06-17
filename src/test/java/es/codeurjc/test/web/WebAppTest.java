@@ -1,6 +1,5 @@
 package es.codeurjc.test.web;
 
-import static io.github.bonigarcia.seljup.BrowserType.CHROME;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -12,20 +11,18 @@ import java.net.URL;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 
-import io.github.bonigarcia.seljup.DockerBrowser;
-import io.github.bonigarcia.seljup.SeleniumExtension;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
-@ExtendWith(SeleniumExtension.class)
 public class WebAppTest {
     protected final static Logger LOG = getLogger(lookup().lookupClass());
 
@@ -47,22 +44,22 @@ public class WebAppTest {
 
         eusURL = System.getenv("ET_EUS_API");
         if (eusURL == null) {
-            ChromeDriverManager.chromedriver().setup();
+            WebDriverManager.chromedriver().setup();
         }
 
         // Wait for SuT ready
         Thread.sleep(6000);
     }
 
-    public void setupTest(WebDriver localDriver, TestInfo info)
-            throws MalformedURLException {
+    @BeforeEach
+    public void setupTest(TestInfo info) throws MalformedURLException {
         String testName = info.getTestMethod().get().getName();
         LOG.info("##### Start test: {}", testName);
 
         String eusURL = System.getenv("ET_EUS_API");
         if (eusURL == null) {
-            // Local Dockerized Google Chrome
-            driver = localDriver;
+            // Local Google Chrome
+            driver = new ChromeDriver();
         } else {
             DesiredCapabilities caps = chrome();
             caps.setCapability("testName", testName);
@@ -82,11 +79,8 @@ public class WebAppTest {
     }
 
     @Test
-    public void createMessageTest(
-            @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
-            TestInfo info) throws InterruptedException, MalformedURLException {
-        setupTest(localDriver, info);
-
+    public void createMessageTest()
+            throws InterruptedException, MalformedURLException {
         driver.get(sutURL);
         LOG.info("Web loaded");
         Thread.sleep(3000);
@@ -107,11 +101,8 @@ public class WebAppTest {
     }
 
     @Test
-    public void removeMessageTest(
-            @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
-            TestInfo info) throws InterruptedException, MalformedURLException {
-        setupTest(localDriver, info);
-
+    public void removeMessageTest()
+            throws InterruptedException, MalformedURLException {
         driver.get(sutURL);
         LOG.info("Web loaded");
         Thread.sleep(2000);
