@@ -1,16 +1,18 @@
-web:
-  build: .
-  image: expoqa19/webapp2:demo2
-  ports:
-    - "38080:8080"
-  environment: 
-    - SPRING_DATASOURCE_URL=jdbc:mysql://db/test
-    - SPRING_DATASOURCE_USERNAME=root
-    - SPRING_DATASOURCE_PASSWORD=pass
-  links:
-    - db
-db:
-  environment:
-    - MYSQL_ROOT_PASSWORD=pass
-    - MYSQL_DATABASE=test
-  image: mysql:5.5.62
+version: "3.7"
+services:
+  web:
+    build: .
+    image: expoqa19/webapp2:demo2
+    ports:
+      - "38080:8080"
+    environment: 
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db/test
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=pass
+    links:
+      - db
+  db:
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_DATABASE=test
+    image: mysql:5.5.62
