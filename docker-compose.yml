@@ -12,11 +12,11 @@ services:
     links:
       - db
     labels:
-      - "sut=web"
+      - "filebeat_enable=true"
   db:
     environment:
       - MYSQL_ROOT_PASSWORD=pass
       - MYSQL_DATABASE=test
     image: mysql:5.5.62
     labels:
-      - "sut=db"
+      - "filebeat_enable=true"
