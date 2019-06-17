@@ -2,7 +2,7 @@ version: "3.7"
 services:
   web:
     build: .
-    image: expoqa19/demo2
+    image: expoqa19/demo4
     ports:
       - "38080:8080"
     environment: 
