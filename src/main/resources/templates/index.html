@@ -3,20 +3,22 @@
 <meta charset="UTF-8" />
 </head>
 <body>
-	<h1>Message forum</h1>
-	<form id="form" action="/" method="post">
-		Title: <input id='title-input' type='text' name='title' />
-		Body: <input id='body-input' type='text' name='body' /> 
-		<input id='submit' type='submit' value='New' />
-	</form>
-	<div id="messages">
-	{{#messages}}
-	<p>Message: 
-		<b>Title:</b><span id='title'>{{title}}</span> 
-		<b>Description:</b> <span id='body'>{{body}}</span>
-		<button id='delete'>Remove</button>
-	</p>
-	{{/messages}}
-	</div>
+    <h1>Message forum</h1>
+    <form id="form" action="/" method="post">
+        Title: <input id='title-input' type='text' name='title' /> Body: <input
+            id='body-input' type='text' name='body' /> <input id='submit'
+            type='submit' value='New' />
+    </form>
+    <div id="messages">
+        {{#messages}}
+        <p>
+            Message: <b>Title: </b><span id='title'>{{title}}</span> <b>Description:</b>
+            <span id='body'>{{body}}</span> <span>
+                <button id='delete-{{title}}'
+                    onClick="location.href='/delete?title={{title}}'">Remove</button>
+            </span>
+        </p>
+        {{/messages}}
+    </div>
 </body>
 </html>
