@@ -39,20 +39,11 @@ public class WebAppTest {
     @BeforeAll
     public static void setupClass() throws IOException {
 
-        String sutHost = System.getenv("ET_SUT_HOST");
-        if (sutHost == null) {
-            sutURL = "http://localhost:38080/";
-        } else {
-            sutURL = "http://" + sutHost + ":38080/";
-        }
-        System.out.println("App url: " + sutURL);
+        String sutHost = "http://localhost:38080/";
 
         waitForSut(sutURL);
         
-        eusURL = System.getenv("ET_EUS_API");
-        if (eusURL == null) {
-            WebDriverManager.chromedriver().version("75").setup();
-        }
+        WebDriverManager.chromedriver().version("75").setup();
     }
 
     @BeforeEach
