@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -44,6 +46,10 @@ public class WebAppTest {
             sutURL = "http://" + sutHost + ":38080/";
         }
         System.out.println("App url: " + sutURL);
+        
+        while (!checkIfUrlIsUp(sutURL)) {
+            logger.trace("SUT {} is not ready yet"
+        }
 
         eusURL = System.getenv("ET_EUS_API");
         if (eusURL == null) {
@@ -98,6 +104,21 @@ public class WebAppTest {
         LOG.info("Message verified");
 
         Thread.sleep(2000);
+    }
+    
+    public static boolean checkIfUrlIsUp(String urlValue) throws IOException {
+        URL url = new URL(urlValue);
+        int responseCode = 0;
+
+        try {
+            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+            huc.setConnectTimeout(2000);
+            responseCode = huc.getResponseCode();
+            return ((responseCode >= 200 && responseCode <= 299)
+                    || (responseCode >= 400 && responseCode <= 415));
+        } catch (IOException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Test
