@@ -50,7 +50,7 @@ public class WebAppTest {
         try {
             while (!checkIfUrlIsUp(sutURL)) {
                 LOG.debug("SUT {} is not ready yet", sutURL);
-                Thread.sleep(1500);
+                Thread.sleep(2000);
             }
         }catch (Exception e) {
             
@@ -104,7 +104,6 @@ public class WebAppTest {
         }
     }
 
-
     @Test
     public void createMessageTest() throws InterruptedException {
         Thread.sleep(1000);
@@ -126,7 +125,7 @@ public class WebAppTest {
 
         Thread.sleep(2000);
     }
-    
+
     @Test
     public void removeMessageTest() throws InterruptedException {
 
@@ -139,7 +138,9 @@ public class WebAppTest {
 
         addMessage(newTitle, newBody);
 
-        driver.findElement(By.id("delete")).click();
+        Thread.sleep(1000);
+
+        driver.findElement(By.id("delete-" + newTitle)).click();
         LOG.info("Delete button clicked");
         Thread.sleep(2000);
 
