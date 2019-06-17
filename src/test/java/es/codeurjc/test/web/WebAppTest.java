@@ -118,7 +118,7 @@ public class WebAppTest {
 
         addMessage(newTitle, newBody);
 
-        driver.findElement(By.id("delete")).click();
+        driver.findElement(By.id("delete-" + newTitle)).click();
         LOG.info("Delete button clicked");
         Thread.sleep(2000);
 
