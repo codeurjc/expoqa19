@@ -32,12 +32,11 @@ public class WebAppTest {
     protected final static Logger LOG = getLogger(lookup().lookupClass());
 
     private static String sutURL;
-    private static String eusURL;
 
     private WebDriver driver;
 
     @BeforeAll
-    public static void setupClass() throws InterruptedException {
+    public static void setupClass() throws IOException {
 
         String sutHost = System.getenv("ET_SUT_HOST");
         if (sutHost == null) {
@@ -47,40 +46,7 @@ public class WebAppTest {
         }
         LOG.info("App url: " + sutURL);
         
-        // Wait for SuT ready
-        try {
-            while (!checkIfUrlIsUp(sutURL)) {
-                LOG.debug("SUT {} is not ready yet", sutURL);
-                Thread.sleep(1500);
-            }
-        }catch (Exception e) {
-            
-        }
-
-        eusURL = System.getenv("ET_EUS_API");
-        if (eusURL == null) {
-            ChromeDriverManager.chromedriver().setup();
-        }
-
-
-    }
-
-    public void setupTest(WebDriver localDriver, TestInfo info)
-            throws MalformedURLException {
-        String testName = info.getTestMethod().get().getName();
-        LOG.info("##### Start test: {}", testName);
-
-        String eusURL = System.getenv("ET_EUS_API");
-        if (eusURL == null) {
-            // Local Dockerized Google Chrome
-            driver = localDriver;
-        } else {
-            DesiredCapabilities caps = chrome();
-            caps.setCapability("testName", testName);
-
-            // Selenium Grid in ElasTest
-            driver = new RemoteWebDriver(new URL(eusURL), caps);
-        }
+        waitForSut(sutURL);
     }
 
     @AfterEach
@@ -88,31 +54,15 @@ public class WebAppTest {
         if (driver != null) {
             driver.quit();
         }
-        String testName = info.getTestMethod().get().getName();
-        LOG.info("##### Finish test: {}", testName);
     }
     
-    public static boolean checkIfUrlIsUp(String urlValue) throws IOException {
-        URL url = new URL(urlValue);
-        int responseCode = 0;
-
-        try {
-            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-            huc.setConnectTimeout(2000);
-            responseCode = huc.getResponseCode();
-            return ((responseCode >= 200 && responseCode <= 299)
-                    || (responseCode >= 400 && responseCode <= 415));
-        } catch (IOException | IllegalArgumentException e) {
-            return false;
-        }
-    }
-
     @Test
     public void createMessageTest(
             @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
             TestInfo info) throws InterruptedException, MalformedURLException {
-        setupTest(localDriver, info);
-
+        
+        this.driver = localDriver;
+        
         driver.get(sutURL);
         LOG.info("Web loaded");
         Thread.sleep(3000);
@@ -136,7 +86,8 @@ public class WebAppTest {
     public void removeMessageTest(
             @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
             TestInfo info) throws InterruptedException, MalformedURLException {
-        setupTest(localDriver, info);
+        
+        this.driver = localDriver;
 
         driver.get(sutURL);
         LOG.info("Web loaded");
@@ -174,6 +125,26 @@ public class WebAppTest {
 
         Thread.sleep(2000);
 
+    }
+
+    public static void waitForSut(String urlValue) throws IOException {
+        URL url = new URL(urlValue);
+        int responseCode = 0;
+        boolean urlIsUp = false;
+        
+        while (!urlIsUp) {
+            LOG.debug("SUT {} is not ready yet", sutURL);
+            try {
+                Thread.sleep(2000);        
+                HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+                huc.setConnectTimeout(2000);
+                responseCode = huc.getResponseCode();
+                urlIsUp = ((responseCode >= 200 && responseCode <= 299)
+                        || (responseCode >= 400 && responseCode <= 415));
+            } catch (IOException | IllegalArgumentException | InterruptedException e) {
+                urlIsUp = false;
+            }
+        }
     }
 
 }
