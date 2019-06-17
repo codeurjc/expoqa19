@@ -16,6 +16,15 @@ node {
            sh "mvn test"
        } 
     } finally {
+        sh "docker-compose logs > all-logs.txt"
+        archive "all-logs.txt"
+      
+        sh "docker-compose logs web > web-logs.txt"
+        archive "web-logs.txt"
+      
+        sh "docker-compose logs db > db-logs.txt"
+        archive "db-logs.txt"
+
         sh "docker-compose down"
         junit "target/*-reports/TEST-*.xml"
     }
