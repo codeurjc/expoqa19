@@ -39,7 +39,7 @@ public class WebAppTest {
     @BeforeAll
     public static void setupClass() throws IOException {
 
-        String sutHost = "http://localhost:38080/";
+        sutURL = "http://localhost:38080/";
 
         waitForSut(sutURL);
         
