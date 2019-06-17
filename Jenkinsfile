@@ -13,7 +13,7 @@ node {
            sh "docker-compose up -d"
        }
        stage("Test") {
-           sh "mvn test -Dsel.jup.recording=true"
+           sh "mvn test -Dsel.jup.recording=true -Dsel.jup.screenshot.at.the.end.of.tests=true -Dsel.jup.screenshot.format=png -Dsel.jup.output.folder=surefire-reports"
        }
            
     } finally {
