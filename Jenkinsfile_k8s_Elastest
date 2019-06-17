@@ -12,20 +12,18 @@ node {
                     sh "./addSutPrefix.sh"                    
                 }
                 stage("Create jar") {
-                    sh "cd webapp2; docker build . -t expoqa19/webapp2:v1"
+                    sh "docker build . -t expoqa19/webapp2:v1"
                 }
                 stage("Start app") {
-                    sh "cd webapp2/k8s; kubectl create -f ."
+                    sh "cd k8s; kubectl create -f ."
                 }
                 stage("Test") {
-                    sleep 7 ///Waiting for the app to be ready
-                    sh "cd webapp2; mvn test"
+                    sh "mvn test"
                 }
             } catch(e){
                 echo 'Err: ' + e.toString()
             } finally {
-                sh 'cd webapp2/k8s; kubectl delete -f .'
-                junit "webapp2/target/*-reports/TEST-*.xml"
+                sh 'cd k8s; kubectl delete -f .'                
             }
         }
     }
