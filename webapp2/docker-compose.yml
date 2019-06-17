@@ -1,5 +1,6 @@
 web:
   build: .
+  image: expoqa19/webapp2:demo2
   ports:
     - "38080:8080"
   environment: 
