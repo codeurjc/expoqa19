@@ -37,7 +37,7 @@ public class WebAppTest {
     private WebDriver driver;
 
     @BeforeAll
-    public static void setupClass() throws InterruptedException {
+    public static void setupClass() throws Exception {
 
         String sutHost = System.getenv("ET_SUT_HOST");
         if (sutHost == null) {
@@ -47,15 +47,7 @@ public class WebAppTest {
         }
         LOG.info("App url: " + sutURL);
         
-        // Wait for SuT ready
-        try {
-            while (!checkIfUrlIsUp(sutURL)) {
-                LOG.debug("SUT {} is not ready yet", sutURL);
-                Thread.sleep(1500);
-            }
-        }catch (Exception e) {
-            
-        }
+        waitForSut(sutURL);
 
         eusURL = System.getenv("ET_EUS_API");
         if (eusURL == null) {
@@ -174,6 +166,26 @@ public class WebAppTest {
 
         Thread.sleep(2000);
 
+    }
+    
+    public static void waitForSut(String urlValue) throws IOException {
+        URL url = new URL(urlValue);
+        int responseCode = 0;
+        boolean urlIsUp = false;
+        
+        while (!urlIsUp) {
+            LOG.debug("SUT {} is not ready yet", sutURL);
+            try {
+                Thread.sleep(2000);        
+                HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+                huc.setConnectTimeout(2000);
+                responseCode = huc.getResponseCode();
+                urlIsUp = ((responseCode >= 200 && responseCode <= 299)
+                        || (responseCode >= 400 && responseCode <= 415));
+            } catch (IOException | IllegalArgumentException | InterruptedException e) {
+                urlIsUp = false;
+            }
+        }
     }
 
 }
