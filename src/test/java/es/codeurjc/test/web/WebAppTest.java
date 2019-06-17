@@ -20,6 +20,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
+import org.springframework.core.annotation.Order;
 
 import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumExtension;
@@ -28,7 +29,7 @@ import io.github.bonigarcia.wdm.ChromeDriverManager;
 @ExtendWith(SeleniumExtension.class)
 public class WebAppTest {
     protected final static Logger LOG = getLogger(lookup().lookupClass());
-    
+
     private static String sutURL;
     private static String eusURL;
 
@@ -49,7 +50,7 @@ public class WebAppTest {
         if (eusURL == null) {
             ChromeDriverManager.chromedriver().setup();
         }
-        
+
         // Wait for SuT ready
         Thread.sleep(6000);
     }
@@ -82,6 +83,7 @@ public class WebAppTest {
     }
 
     @Test
+    @Order(1)
     public void testCreateMessage(
             @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
             TestInfo info) throws InterruptedException, MalformedURLException {
@@ -107,6 +109,7 @@ public class WebAppTest {
     }
 
     @Test
+    @Order(2)
     public void testRemoveMessage(
             @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
             TestInfo info) throws InterruptedException, MalformedURLException {
