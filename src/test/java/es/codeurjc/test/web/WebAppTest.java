@@ -1,9 +1,8 @@
 package es.codeurjc.test.web;
 
-import static io.github.bonigarcia.seljup.BrowserType.CHROME;
 import static java.lang.invoke.MethodHandles.lookup;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -14,22 +13,23 @@ import java.net.URL;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import io.github.bonigarcia.seljup.DockerBrowser;
-import io.github.bonigarcia.seljup.SeleniumExtension;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
-@ExtendWith(SeleniumExtension.class)
 public class WebAppTest {
-    protected final static Logger LOG = getLogger(lookup().lookupClass());
+    protected final Logger logger = getLogger(lookup().lookupClass());
+
+    private static Logger LOG = LoggerFactory.getLogger(WebAppTest.class);
 
     private static String sutURL;
     private static String eusURL;
@@ -37,74 +37,30 @@ public class WebAppTest {
     private WebDriver driver;
 
     @BeforeAll
-    public static void setupClass() throws Exception {
+    public static void setupClass() throws IOException {
 
-        String sutHost = System.getenv("ET_SUT_HOST");
-        if (sutHost == null) {
-            sutURL = "http://localhost:38080/";
-        } else {
-            sutURL = "http://" + sutHost + ":38080/";
-        }
-        LOG.info("App url: " + sutURL);
-        
+        String sutHost = "http://localhost:38080/";
+
         waitForSut(sutURL);
-
-        eusURL = System.getenv("ET_EUS_API");
-        if (eusURL == null) {
-            ChromeDriverManager.chromedriver().setup();
-        }
-
-
+        
+        WebDriverManager.chromedriver().version("75").setup();
     }
 
-    public void setupTest(WebDriver localDriver, TestInfo info)
-            throws MalformedURLException {
-        String testName = info.getTestMethod().get().getName();
-        LOG.info("##### Start test: {}", testName);
-
-        String eusURL = System.getenv("ET_EUS_API");
-        if (eusURL == null) {
-            // Local Dockerized Google Chrome
-            driver = localDriver;
-        } else {
-            DesiredCapabilities caps = chrome();
-            caps.setCapability("testName", testName);
-
-            // Selenium Grid in ElasTest
-            driver = new RemoteWebDriver(new URL(eusURL), caps);
-        }
+    @BeforeEach
+    public void setupTest() {
+        driver = new ChromeDriver();
     }
 
     @AfterEach
-    public void teardown(TestInfo info) {
+    public void teardown() {
         if (driver != null) {
             driver.quit();
-        }
-        String testName = info.getTestMethod().get().getName();
-        LOG.info("##### Finish test: {}", testName);
-    }
-    
-    public static boolean checkIfUrlIsUp(String urlValue) throws IOException {
-        URL url = new URL(urlValue);
-        int responseCode = 0;
-
-        try {
-            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-            huc.setConnectTimeout(2000);
-            responseCode = huc.getResponseCode();
-            return ((responseCode >= 200 && responseCode <= 299)
-                    || (responseCode >= 400 && responseCode <= 415));
-        } catch (IOException | IllegalArgumentException e) {
-            return false;
         }
     }
 
     @Test
-    public void createMessageTest(
-            @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
-            TestInfo info) throws InterruptedException, MalformedURLException {
-        setupTest(localDriver, info);
-
+    public void createMessageTest() throws InterruptedException {
+        Thread.sleep(1000);
         driver.get(sutURL);
         LOG.info("Web loaded");
         Thread.sleep(3000);
@@ -117,18 +73,15 @@ public class WebAppTest {
         String title = driver.findElement(By.id("title")).getText();
         String body = driver.findElement(By.id("body")).getText();
 
-        assertEquals(newTitle, title);
-        assertEquals(newBody, body);
+        assertThat(title).isEqualTo(newTitle);
+        assertThat(body).isEqualTo(newBody);
         LOG.info("Message verified");
 
         Thread.sleep(2000);
     }
-
+    
     @Test
-    public void removeMessageTest(
-            @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
-            TestInfo info) throws InterruptedException, MalformedURLException {
-        setupTest(localDriver, info);
+    public void removeMessageTest() throws InterruptedException {
 
         driver.get(sutURL);
         LOG.info("Web loaded");
@@ -167,7 +120,7 @@ public class WebAppTest {
         Thread.sleep(2000);
 
     }
-    
+
     public static void waitForSut(String urlValue) throws IOException {
         URL url = new URL(urlValue);
         int responseCode = 0;
@@ -187,5 +140,4 @@ public class WebAppTest {
             }
         }
     }
-
 }
