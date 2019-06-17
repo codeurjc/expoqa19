@@ -11,5 +11,3 @@ spec:
   selector:
     app: db
   type: NodePort
-status:
-  loadBalancer: {}
