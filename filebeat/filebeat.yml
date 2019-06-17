@@ -38,9 +38,9 @@ processors:
 # Multiple outputs may be used.
 
 #-------------------------- Elasticsearch output ------------------------------
-#output.elasticsearch:
+output.elasticsearch:
   # Array of hosts to connect to.
-  #hosts: ["localhost:9200"]
+  hosts: ["${ELASTICSEARCH_HOST:localhost}:${ELASTICSEARCH_PORT:9200}"]
 
   # Optional protocol and basic auth credentials.
   #protocol: "https"
@@ -55,9 +55,9 @@ processors:
 
 
 #----------------------------- File output --------------------------------
-output.file:
-  path: "/tmp/filebeat"
-  filename: filebeat
+#output.file:
+#  path: "/tmp/filebeat"
+#  filename: filebeat
 
 #================================ Logging =====================================
 
