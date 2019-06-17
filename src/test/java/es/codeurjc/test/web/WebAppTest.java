@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -48,7 +50,14 @@ public class WebAppTest {
         }
 
         // Wait for SuT ready
-        Thread.sleep(6000);
+        try {
+            while (!checkIfUrlIsUp(sutURL)) {
+                LOG.debug("SUT {} is not ready yet", sutURL);
+                Thread.sleep(1500);
+            }
+        }catch (Exception e) {
+            
+        }
     }
 
     @BeforeEach
@@ -76,6 +85,21 @@ public class WebAppTest {
         }
         String testName = info.getTestMethod().get().getName();
         LOG.info("##### Finish test: {}", testName);
+    }
+    
+    public static boolean checkIfUrlIsUp(String urlValue) throws IOException {
+        URL url = new URL(urlValue);
+        int responseCode = 0;
+
+        try {
+            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+            huc.setConnectTimeout(2000);
+            responseCode = huc.getResponseCode();
+            return ((responseCode >= 200 && responseCode <= 299)
+                    || (responseCode >= 400 && responseCode <= 415));
+        } catch (IOException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Test
