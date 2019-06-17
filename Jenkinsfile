@@ -1,6 +1,6 @@
 node {
     elastest(tss: ['EUS'], surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml', monitoring: true, project: 'ExpoQA19') {
-        withKubeConfig([credentialsId: 'minikube_token', serverUrl: 'https://localhost:8443']) {
+        withKubeConfig([credentialsId: 'K8S_TOKEN', serverUrl: '${K8S_URL}']) {
             try {
                 stage("Preparation") { 
                     git(
