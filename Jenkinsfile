@@ -13,10 +13,11 @@ node {
            sh "docker-compose up -d"
        }
        stage("Test") {
-           sh "mvn test"
+           sh "mvn test -Dsel.jup.recording=true"
        }
            
     } finally {
+        step([$class: 'JUnitResultArchiver', testDataPublishers: [[$class: 'AttachmentPublisher']], testResults: '**/target/surefire-reports/TEST-*.xml'])
         sh "docker-compose logs"
           
         sh "docker-compose logs > all-logs.txt"
@@ -30,6 +31,6 @@ node {
           
         sh "docker-compose down"
           
-        junit "webapp2/target/*-reports/TEST-*.xml"
+        //junit "webapp2/target/*-reports/TEST-*.xml"
     }
 }
