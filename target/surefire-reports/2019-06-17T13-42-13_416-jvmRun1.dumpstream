@@ -1,0 +1,70 @@
+# Created at 2019-06-17T13:42:27.554
+Unexpected IOException with stream: jun 17, 2019 1:42:27 PM org.openqa.selenium.remote.ProtocolHandshake createSession
+INFORMACIÓN: Detected dialect: W3C
+
+
+# Created at 2019-06-17T13:42:27.633
+Unexpected IOException with stream: 2019-06-17 13:42:27.622  INFO   --- [           main] es.codeurjc.test.web.WebAppTest          : ##### Start test: createMessageTest
+
+
+# Created at 2019-06-17T13:42:27.868
+Unexpected IOException with stream: 2019-06-17 13:42:27.867  INFO   --- [           main] es.codeurjc.test.web.WebAppTest          : Web loaded
+
+
+# Created at 2019-06-17T13:42:31.006
+Unexpected IOException with stream: 2019-06-17 13:42:31.004  INFO   --- [           main] es.codeurjc.test.web.WebAppTest          : ##### Finish test: createMessageTest
+
+
+# Created at 2019-06-17T13:42:31.012
+Unexpected IOException with stream: 2019-06-17 13:42:31.011  INFO   --- [pool-3-thread-1] i.g.bonigarcia.seljup.DockerService      : Stopping Docker container aerokube/selenoid:1.9.1
+
+
+# Created at 2019-06-17T13:42:32.081
+Unexpected IOException: 7,1,es.codeurjc.test.web.WebAppTest,createMessageTest{RemoteWebDriver\002C TestInfo},null,no such element: Unable to locate element: {"method":"css selector"\002C"selector":"#title\005C-input"}\000A  (Session info: chrome=75.0.3770.80)\000AFor documentation on this error\002C please visit: https://www.seleniumhq.org/exceptions/no_such_element.html\000ABuild info: version: '3.141.59'\002C revision: 'e82be7d358'\002C time: '2018-11-14T08:17:03'\000ASystem info: host: 'edu-SAT-PRO-A50D'\002C ip: '127.0.1.1'\002C os.name: 'Linux'\002C os.arch: 'amd64'\002C os.version: '4.15.0-51-generic'\002C java.version: '1.8.0_201'\000ADriver info: org.openqa.selenium.remote.RemoteWebDriver\000ACapabilities {acceptInsecureCerts: false\002C browserName: chrome\002C browserVersion: 75.0.3770.80\002C chrome: {chromedriverVersion: 75.0.3770.8 (681f24ea911fe7...\002C userDataDir: /tmp/.com.google.Chrome.Uibu2t}\002C goog:chromeOptions: {debuggerAddress: localhost:41561}\002C javascriptEnabled: true\002C networkConnectionEnabled: false\002C pageLoadStrategy: normal\002C platform: LINUX\002C platformName: LINUX\002C proxy: Proxy()\002C setWindowRect: true\002C strictFileInteractability: false\002C timeouts: {implicit: 0\002C pageLoad: 300000\002C script: 30000}\002C unhandledPromptBehavior: dismiss and notify}\000ASession ID: 4d20b86ce1cb13e619d03149dd1d10ba\000A*** Element info: {Using=id\002C value=title-input},null,no such element: Unable to locate element: {"method":"css selector"\002C"selector":"#title\005C-input"}\000A  (Session info: chrome=75.0.3770.80)\000AFor documentation on this error\002C please visit: https://www.seleniumhq.org/exceptions/no_such_element.html\000ABuild info: version: '3.141.59'\002C revision: 'e82be7d358'\002C time: '2018-11-14T08:17:03'\000ASystem info: host: 'edu-SAT-PRO-A50D'\002C ip: '127.0.1.1'\002C os.name: 'Linux'\002C os.arch: 'amd64'\002C os.version: '4.15.0-51-generic'\002C java.version: '1.8.0_201'\000ADriver info: org.openqa.selenium.remote.RemoteWebDriver\000ACapabilities {acceptInsecureCerts: false\002C browserName: chrome\002C browserVersion: 75.0.3770.80\002C chrome: {chromedriverVersion: 75.0.3770.8 (681f24ea911fe7...\002C userDataDir: /tmp/.com.google.Chrome.Uibu2t}\002C goog:chromeOptions: {debuggerAddress: localhost:41561}\002C javascriptEnabled: true\002C networkConnectionEnabled: false\002C pageLoadStrategy: normal\002C platform: LINUX\002C platformName: LINUX\002C proxy: Proxy()\002C setWindowRect: true\002C strictFileInteractability: false\002C timeouts: {implicit: 0\002C pageLoad: 300000\002C script: 30000}\002C unhandledPromptBehavior: dismiss and notify}\000ASession ID: 4d20b86ce1cb13e619d03149dd1d10ba\000A*** Element info: {Using=id\002C value=title-input},WebAppTest.createMessageTest:97->addMessage:140 \00BB NoSuchElement no such elemen...,org.openqa.selenium.NoSuchElementException: \000Ano such element: Unable to locate element: {"method":"css selector"\002C"selector":"#title\005C-input"}\000A  (Session info: chrome=75.0.3770.80)\000AFor documentation on this error\002C please visit: https://www.seleniumhq.org/exceptions/no_such_element.html\000ABuild info: version: '3.141.59'\002C revision: 'e82be7d358'\002C time: '2018-11-14T08:17:03'\000ASystem info: host: 'edu-SAT-PRO-A50D'\002C ip: '127.0.1.1'\002C os.name: 'Linux'\002C os.arch: 'amd64'\002C os.version: '4.15.0-51-generic'\002C java.version: '1.8.0_201'\000ADriver info: org.openqa.selenium.remote.RemoteWebDriver\000ACapabilities {acceptInsecureCerts: false\002C browserName: chrome\002C browserVersion: 75.0.3770.80\002C chrome: {chromedriverVersion: 75.0.3770.8 (681f24ea911fe7...\002C userDataDir: /tmp/.com.google.Chrome.Uibu2t}\002C goog:chromeOptions: {debuggerAddress: localhost:41561}\002C javascriptEnabled: true\002C networkConnectionEnabled: false\002C pageLoadStrategy: normal\002C platform: LINUX\002C platformName: LINUX\002C proxy: Proxy()\002C setWindowRect: true\002C strictFileInteractability: false\002C timeouts: {implicit: 0\002C pageLoad: 300000\002C script: 30000}\002C unhandledPromptBehavior: dismiss and notify}\000ASession ID: 4d20b86ce1cb13e619d03149dd1d10ba\000A*** Element info: {Using=id\002C value=title-input}\000A\0009at es.codeurjc.test.web.WebAppTest.addMessage(WebAppTest.java:140)\000A\0009at es.codeurjc.test.web.WebAppTest.createMessageTest(WebAppTest.java:97)\000A
+
+
+# Created at 2019-06-17T13:42:32.083
+Unexpected IOException: 5,1,es.codeurjc.test.web.WebAppTest,removeMessageTest{RemoteWebDriver\002C TestInfo},null,null,null
+
+
+# Created at 2019-06-17T13:42:32.095
+Unexpected IOException with stream: 2019-06-17 13:42:32.094  INFO   --- [           main] i.g.b.s.handler.DockerDriverHandler      : Using CHROME version 75.0 (latest)
+
+
+# Created at 2019-06-17T13:42:32.107
+Unexpected IOException with stream: 2019-06-17 13:42:32.106  INFO   --- [           main] i.g.bonigarcia.seljup.DockerService      : Starting Docker container aerokube/selenoid:1.9.1
+
+
+# Created at 2019-06-17T13:42:32.210
+Unexpected IOException with stream: 2019-06-17 13:42:32.209  INFO   --- [           main] c.s.docker.client.DefaultDockerClient    : Starting container with Id: 837941caa17ad90d225a3d041b5b512e142c6a98132400c36816a9e4380b5d03
+
+
+# Created at 2019-06-17T13:42:34.206
+Unexpected IOException with stream: jun 17, 2019 1:42:34 PM org.openqa.selenium.remote.ProtocolHandshake createSession
+INFORMACIÓN: Detected dialect: W3C
+
+
+# Created at 2019-06-17T13:42:34.209
+Unexpected IOException with stream: 2019-06-17 13:42:34.208  INFO   --- [           main] es.codeurjc.test.web.WebAppTest          : ##### Start test: removeMessageTest
+
+
+# Created at 2019-06-17T13:42:34.339
+Unexpected IOException with stream: 2019-06-17 13:42:34.339  INFO   --- [           main] es.codeurjc.test.web.WebAppTest          : Web loaded
+
+
+# Created at 2019-06-17T13:42:36.445
+Unexpected IOException with stream: 2019-06-17 13:42:36.445  INFO   --- [           main] es.codeurjc.test.web.WebAppTest          : ##### Finish test: removeMessageTest
+
+
+# Created at 2019-06-17T13:42:36.448
+Unexpected IOException with stream: 2019-06-17 13:42:36.447  INFO   --- [pool-4-thread-1] i.g.bonigarcia.seljup.DockerService      : Stopping Docker container aerokube/selenoid:1.9.1
+
+
+# Created at 2019-06-17T13:42:36.959
+Unexpected IOException: 7,1,es.codeurjc.test.web.WebAppTest,removeMessageTest{RemoteWebDriver\002C TestInfo},null,no such element: Unable to locate element: {"method":"css selector"\002C"selector":"#title\005C-input"}\000A  (Session info: chrome=75.0.3770.80)\000AFor documentation on this error\002C please visit: https://www.seleniumhq.org/exceptions/no_such_element.html\000ABuild info: version: '3.141.59'\002C revision: 'e82be7d358'\002C time: '2018-11-14T08:17:03'\000ASystem info: host: 'edu-SAT-PRO-A50D'\002C ip: '127.0.1.1'\002C os.name: 'Linux'\002C os.arch: 'amd64'\002C os.version: '4.15.0-51-generic'\002C java.version: '1.8.0_201'\000ADriver info: org.openqa.selenium.remote.RemoteWebDriver\000ACapabilities {acceptInsecureCerts: false\002C browserName: chrome\002C browserVersion: 75.0.3770.80\002C chrome: {chromedriverVersion: 75.0.3770.8 (681f24ea911fe7...\002C userDataDir: /tmp/.com.google.Chrome.qTwc3q}\002C goog:chromeOptions: {debuggerAddress: localhost:43453}\002C javascriptEnabled: true\002C networkConnectionEnabled: false\002C pageLoadStrategy: normal\002C platform: LINUX\002C platformName: LINUX\002C proxy: Proxy()\002C setWindowRect: true\002C strictFileInteractability: false\002C timeouts: {implicit: 0\002C pageLoad: 300000\002C script: 30000}\002C unhandledPromptBehavior: dismiss and notify}\000ASession ID: 3a35bb299b0f1c92c1b4808843a86907\000A*** Element info: {Using=id\002C value=title-input},null,no such element: Unable to locate element: {"method":"css selector"\002C"selector":"#title\005C-input"}\000A  (Session info: chrome=75.0.3770.80)\000AFor documentation on this error\002C please visit: https://www.seleniumhq.org/exceptions/no_such_element.html\000ABuild info: version: '3.141.59'\002C revision: 'e82be7d358'\002C time: '2018-11-14T08:17:03'\000ASystem info: host: 'edu-SAT-PRO-A50D'\002C ip: '127.0.1.1'\002C os.name: 'Linux'\002C os.arch: 'amd64'\002C os.version: '4.15.0-51-generic'\002C java.version: '1.8.0_201'\000ADriver info: org.openqa.selenium.remote.RemoteWebDriver\000ACapabilities {acceptInsecureCerts: false\002C browserName: chrome\002C browserVersion: 75.0.3770.80\002C chrome: {chromedriverVersion: 75.0.3770.8 (681f24ea911fe7...\002C userDataDir: /tmp/.com.google.Chrome.qTwc3q}\002C goog:chromeOptions: {debuggerAddress: localhost:43453}\002C javascriptEnabled: true\002C networkConnectionEnabled: false\002C pageLoadStrategy: normal\002C platform: LINUX\002C platformName: LINUX\002C proxy: Proxy()\002C setWindowRect: true\002C strictFileInteractability: false\002C timeouts: {implicit: 0\002C pageLoad: 300000\002C script: 30000}\002C unhandledPromptBehavior: dismiss and notify}\000ASession ID: 3a35bb299b0f1c92c1b4808843a86907\000A*** Element info: {Using=id\002C value=title-input},WebAppTest.removeMessageTest:122->addMessage:140 \00BB NoSuchElement no such eleme...,org.openqa.selenium.NoSuchElementException: \000Ano such element: Unable to locate element: {"method":"css selector"\002C"selector":"#title\005C-input"}\000A  (Session info: chrome=75.0.3770.80)\000AFor documentation on this error\002C please visit: https://www.seleniumhq.org/exceptions/no_such_element.html\000ABuild info: version: '3.141.59'\002C revision: 'e82be7d358'\002C time: '2018-11-14T08:17:03'\000ASystem info: host: 'edu-SAT-PRO-A50D'\002C ip: '127.0.1.1'\002C os.name: 'Linux'\002C os.arch: 'amd64'\002C os.version: '4.15.0-51-generic'\002C java.version: '1.8.0_201'\000ADriver info: org.openqa.selenium.remote.RemoteWebDriver\000ACapabilities {acceptInsecureCerts: false\002C browserName: chrome\002C browserVersion: 75.0.3770.80\002C chrome: {chromedriverVersion: 75.0.3770.8 (681f24ea911fe7...\002C userDataDir: /tmp/.com.google.Chrome.qTwc3q}\002C goog:chromeOptions: {debuggerAddress: localhost:43453}\002C javascriptEnabled: true\002C networkConnectionEnabled: false\002C pageLoadStrategy: normal\002C platform: LINUX\002C platformName: LINUX\002C proxy: Proxy()\002C setWindowRect: true\002C strictFileInteractability: false\002C timeouts: {implicit: 0\002C pageLoad: 300000\002C script: 30000}\002C unhandledPromptBehavior: dismiss and notify}\000ASession ID: 3a35bb299b0f1c92c1b4808843a86907\000A*** Element info: {Using=id\002C value=title-input}\000A\0009at es.codeurjc.test.web.WebAppTest.addMessage(WebAppTest.java:140)\000A\0009at es.codeurjc.test.web.WebAppTest.removeMessageTest(WebAppTest.java:122)\000A
+
+
+# Created at 2019-06-17T13:42:36.967
+Unexpected IOException: 2,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,es.codeurjc.test.web.WebAppTest,null,null,null
+
+

@@ -6,6 +6,8 @@
 *.settings
 *.mvn
 */target
+./target
+./mvn
 
 # Log file
 *.log

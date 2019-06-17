@@ -12,23 +12,19 @@ import java.net.URL;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
-import org.springframework.core.annotation.Order;
 
 import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumExtension;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(SeleniumExtension.class)
 public class WebAppTest {
     protected final static Logger LOG = getLogger(lookup().lookupClass());
@@ -86,8 +82,7 @@ public class WebAppTest {
     }
 
     @Test
-    @Order(1)
-    public void testCreateMessage(
+    public void createMessageTest(
             @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
             TestInfo info) throws InterruptedException, MalformedURLException {
         setupTest(localDriver, info);
@@ -112,8 +107,7 @@ public class WebAppTest {
     }
 
     @Test
-    @Order(2)
-    public void testRemoveMessage(
+    public void removeMessageTest(
             @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
             TestInfo info) throws InterruptedException, MalformedURLException {
         setupTest(localDriver, info);
