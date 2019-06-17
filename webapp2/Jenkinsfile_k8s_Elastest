@@ -1,38 +1,34 @@
 node {
-  elastest(tss: ['EUS'], surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml', monitoring: true, project: 'ExpoQA19') {
-     try {
-       stage("Preparation") { 
-        git(
-             url: 'https://github.com/codeurjc/expoqa19.git',
-             branch: "${BRANCH}"
-         )
-       }
-       stage("Replace web app name to sut-XYZ-web and DB name to sut-XYZ-db"){
-            sh "cd webapp2/k8s; sed -i -e 's/name: web/name: ${env.ET_SUT_CONTAINER_NAME}-web/g' -e 's/sut_/sut-/g' web-deployment.yaml"
-            sh "cd webapp2/k8s; sed -i -e 's/name: db/name: ${env.ET_SUT_CONTAINER_NAME}-db/g' -e 's/sut_/sut-/g' db-deployment.yaml"
-       }
-       stage("Create jar") {
-           sh "cd webapp2; docker build . -t expoqa19/webapp2:v1"
-       }
-       stage("Start app") {
-           withKubeConfig([credentialsId: 'minikube_token',
-                    serverUrl: 'https://localhost:8443'
-                    ]) {
-                         sh "cd webapp2/k8s; kubectl create -f ."
-                        }
-       }
-       stage("Test") {
-           sleep 7 ///Waiting for the app to be ready
-           sh "cd webapp2; mvn test"
-       } 
-    } catch(e){
-        echo 'Err: ' + e.toString()
-    } finally {       
-        withKubeConfig([credentialsId: 'minikube_token', serverUrl: 'https://localhost:8443']) {          
-            sh 'cd webapp2/k8s; kubectl delete -f .'
+    elastest(tss: ['EUS'], surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml', monitoring: true, project: 'ExpoQA19') {
+        withKubeConfig([credentialsId: 'minikube_token', serverUrl: 'https://localhost:8443']) {
+            try {
+                stage("Preparation") { 
+                    git(
+                        url: 'https://github.com/codeurjc/expoqa19.git',
+                        branch: "${BRANCH}"
+                        )
+                }
+                stage("Replace web app name to sut-XYZ-web and DB name to sut-XYZ-db"){
+                    sh "cd webapp2/k8s; sed -i -e 's/name: web/name: ${env.ET_SUT_CONTAINER_NAME}-web/g' -e 's/sut_/sut-/g' web-deployment.yaml"
+                    sh "cd webapp2/k8s; sed -i -e 's/name: db/name: ${env.ET_SUT_CONTAINER_NAME}-db/g' -e 's/sut_/sut-/g' db-deployment.yaml"
+                    
+                }
+                stage("Create jar") {
+                    sh "cd webapp2; docker build . -t expoqa19/webapp2:v1"
+                }
+                stage("Start app") {
+                    sh "cd webapp2/k8s; kubectl create -f ."
+                }
+                stage("Test") {
+                    sleep 7 ///Waiting for the app to be ready
+                    sh "cd webapp2; mvn test"
+                }
+            } catch(e){
+                echo 'Err: ' + e.toString()
+            } finally {
+                sh 'cd webapp2/k8s; kubectl delete -f .'
+                junit "webapp2/target/*-reports/TEST-*.xml"
+            }
         }
-          
-        junit "webapp2/target/*-reports/TEST-*.xml"
     }
-  }
 }
