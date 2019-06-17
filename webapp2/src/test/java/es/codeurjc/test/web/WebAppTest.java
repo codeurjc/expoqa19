@@ -47,8 +47,12 @@ public class WebAppTest {
         }
         System.out.println("App url: " + sutURL);
         
-        while (!checkIfUrlIsUp(sutURL)) {
-            logger.trace("SUT {} is not ready yet")
+        try {
+            while (!checkIfUrlIsUp(sutURL)) {
+                LOG.debug("SUT {} is not ready yet", sutURL);
+            }
+        }catch (Exception e) {
+            
         }
 
         eusURL = System.getenv("ET_EUS_API");
