@@ -7,15 +7,9 @@ node {
              branch: "${BRANCH}"
          )
        }
-       stage("Replace web app name to sut-XYZ"){
-            sh "cd webapp2/k8s; sed -i 's/name: web/name: ${env.ET_SUT_CONTAINER_NAME}-web/g' web-deployment.yaml"
-            sh "cd webapp2/k8s; sed -i 's/sut_/sut-/g' web-deployment.yaml"
-            sh "cd webapp2/k8s; cat web-deployment.yaml"
-       }
-       stage("Replace DB name to sut-XYZ_db"){
-            sh "cd webapp2/k8s; sed -i 's/name: db/name: ${env.ET_SUT_CONTAINER_NAME}-db/g' db-deployment.yaml"
-            sh "cd webapp2/k8s; sed -i 's/sut_/sut-/g' db-deployment.yaml"
-            sh "cd webapp2/k8s; cat db-deployment.yaml"
+       stage("Replace web app name to sut-XYZ-web and DB name to sut-XYZ-db"){
+            sh "cd webapp2/k8s; sed -i -e 's/name: web/name: ${env.ET_SUT_CONTAINER_NAME}-web/g' -e 's/sut_/sut-/g' web-deployment.yaml"
+            sh "cd webapp2/k8s; sed -i -e 's/name: db/name: ${env.ET_SUT_CONTAINER_NAME}-db/g' -e 's/sut_/sut-/g' db-deployment.yaml"
        }
        stage("Create jar") {
            sh "cd webapp2; docker build . -t expoqa19/webapp2:v1"
