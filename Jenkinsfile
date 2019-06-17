@@ -3,7 +3,7 @@ node {
        stage("Preparation") { 
             git(
                 url: 'https://github.com/codeurjc/expoqa19.git',
-                branch: "demo0"
+                branch: "demo1"
             )
        }
        stage("Create jar") {
