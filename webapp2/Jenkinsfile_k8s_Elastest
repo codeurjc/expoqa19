@@ -34,17 +34,7 @@ node {
     } catch(e){
         echo 'Err: ' + e.toString()
     } finally {       
-        withKubeConfig([credentialsId: 'minikube_token', serverUrl: 'https://localhost:8443']) {
-
-           /* sh 'kubectl logs $(kubectl get pods | grep web | awk "{print $1}")'
-            sh 'kubectl logs $(kubectl get pods | grep db-deploy | awk "{print $1}")'
-    
-            sh 'cd webapp2/k8s; kubectl logs $(kubectl get pods | grep web | awk "{print $1}") > web-logs.txt'
-            archive "webapp2/k8s/web-logs.txt"
-              
-            sh 'cd webapp2/k8s; kubectl logs $(kubectl get pods | grep db-deploy | awk "{print $1}") > db-logs.txt'
-            archive "webapp2/db-logs.txt"*/
-          
+        withKubeConfig([credentialsId: 'minikube_token', serverUrl: 'https://localhost:8443']) {          
             sh 'cd webapp2/k8s; kubectl delete -f .'
         }
           
