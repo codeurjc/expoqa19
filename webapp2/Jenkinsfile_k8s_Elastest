@@ -9,7 +9,7 @@ node {
                         )
                 }
                 stage("Add SUT prefix"){
-                    sh "./addSutPrefix.sh"                    
+                    sh "cd webapp2;./addSutPrefix.sh"                    
                 }
                 stage("Create jar") {
                     sh "cd webapp2; docker build . -t expoqa19/webapp2:v1"
