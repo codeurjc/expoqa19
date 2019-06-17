@@ -37,7 +37,7 @@ public class WebAppTest {
     private WebDriver driver;
 
     @BeforeAll
-    public static void setupClass() {
+    public static void setupClass() throws IOException {
 
         String sutHost = System.getenv("ET_SUT_HOST");
         if (sutHost == null) {
