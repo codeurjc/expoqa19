@@ -47,7 +47,7 @@ public class WebAppTest {
         }
         System.out.println("App url: " + sutURL);
         
-        checkIfUrlIsUp(sutURL);
+        waitForSut(sutURL);
 
         eusURL = System.getenv("ET_EUS_API");
         if (eusURL == null) {
@@ -147,7 +147,7 @@ public class WebAppTest {
 
     }
 
-    public static void checkIfUrlIsUp(String urlValue) throws IOException {
+    public static void waitForSut(String urlValue) throws IOException {
         URL url = new URL(urlValue);
         int responseCode = 0;
         boolean urlIsUp = false;
