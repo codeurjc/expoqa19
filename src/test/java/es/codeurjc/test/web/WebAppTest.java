@@ -50,6 +50,7 @@ public class WebAppTest {
         try {
             while (!checkIfUrlIsUp(sutURL)) {
                 LOG.debug("SUT {} is not ready yet", sutURL);
+                Thread.sleep(1500);
             }
         }catch (Exception e) {
             
