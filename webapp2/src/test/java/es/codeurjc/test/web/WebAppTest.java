@@ -35,7 +35,7 @@ public class WebAppTest {
     private WebDriver driver;
 
     @BeforeAll
-    public static void setupClass() {
+    public static void setupClass() throws InterruptedException {
 
         String sutHost = System.getenv("ET_SUT_HOST");
         if (sutHost == null) {
@@ -49,6 +49,9 @@ public class WebAppTest {
         if (eusURL == null) {
             ChromeDriverManager.chromedriver().setup();
         }
+        
+        // Wait for SuT ready
+        Thread.sleep(6000);
     }
 
     public void setupTest(WebDriver localDriver, TestInfo info)
@@ -84,7 +87,6 @@ public class WebAppTest {
             TestInfo info) throws InterruptedException, MalformedURLException {
         setupTest(localDriver, info);
 
-        Thread.sleep(1000);
         driver.get(sutURL);
         LOG.info("Web loaded");
         Thread.sleep(3000);
