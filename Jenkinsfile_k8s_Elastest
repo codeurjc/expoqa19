@@ -23,7 +23,8 @@ node {
             } catch(e){
                 echo 'Err: ' + e.toString()
             } finally {
-                sh 'cd k8s; kubectl delete -f .'                
+                sh 'cd k8s; kubectl delete -f .'
+                junit "target/*-reports/TEST-*.xml"
             }
         }
     }
