@@ -16,7 +16,7 @@ node {
            sh "mvn test"
        } 
     } finally {
-        sh "cd docker-compose down"
+        sh "docker-compose down"
         junit "target/*-reports/TEST-*.xml"
     }
 }
