@@ -1,10 +1,7 @@
 node {
     try {
        stage("Preparation") { 
-            git(
-                url: 'https://github.com/codeurjc/expoqa19.git',
-                branch: "${BRANCH}"
-                )
+            git 'https://github.com/codeurjc/expoqa19.git'
        }
        stage("Create jar") {
            sh "cd webapp2; docker-compose build"
