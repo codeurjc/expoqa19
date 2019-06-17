@@ -37,7 +37,7 @@ public class WebAppTest {
     private WebDriver driver;
 
     @BeforeAll
-    public static void setupClass() {
+    public static void setupClass() throws Exception {
 
         String sutHost = System.getenv("ET_SUT_HOST");
         if (sutHost == null) {
@@ -47,14 +47,7 @@ public class WebAppTest {
         }
         System.out.println("App url: " + sutURL);
         
-        try {
-            while (!checkIfUrlIsUp(sutURL)) {
-                LOG.debug("SUT {} is not ready yet", sutURL);
-                Thread.sleep(2000);
-            }
-        }catch (Exception e) {
-            
-        }
+        waitForSut(sutURL);
 
         eusURL = System.getenv("ET_EUS_API");
         if (eusURL == null) {
@@ -89,20 +82,7 @@ public class WebAppTest {
         logger.info("##### Finish test: {}", testName);
     }
 
-    public static boolean checkIfUrlIsUp(String urlValue) throws IOException {
-        URL url = new URL(urlValue);
-        int responseCode = 0;
 
-        try {
-            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-            huc.setConnectTimeout(2000);
-            responseCode = huc.getResponseCode();
-            return ((responseCode >= 200 && responseCode <= 299)
-                    || (responseCode >= 400 && responseCode <= 415));
-        } catch (IOException | IllegalArgumentException e) {
-            return false;
-        }
-    }
 
     @Test
     public void createMessageTest() throws InterruptedException {
@@ -125,7 +105,7 @@ public class WebAppTest {
 
         Thread.sleep(2000);
     }
-
+    
     @Test
     public void removeMessageTest() throws InterruptedException {
 
@@ -138,15 +118,14 @@ public class WebAppTest {
 
         addMessage(newTitle, newBody);
 
-        Thread.sleep(1000);
-
-        driver.findElement(By.id("delete-" + newTitle)).click();
+        driver.findElement(By.id("delete")).click();
         LOG.info("Delete button clicked");
         Thread.sleep(2000);
 
         try {
             driver.findElement(
                     By.xpath("//span[contains(text(),'" + newTitle + "')]"));
+            fail("Message should be deleted");
         } catch (Exception e) {
             LOG.info("Message deleted");
         }
@@ -166,6 +145,26 @@ public class WebAppTest {
 
         Thread.sleep(2000);
 
+    }
+
+    public static void waitForSut(String urlValue) throws IOException {
+        URL url = new URL(urlValue);
+        int responseCode = 0;
+        boolean urlIsUp = false;
+        
+        while (!urlIsUp) {
+            LOG.debug("SUT {} is not ready yet", sutURL);
+            try {
+                Thread.sleep(2000);        
+                HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+                huc.setConnectTimeout(2000);
+                responseCode = huc.getResponseCode();
+                urlIsUp = ((responseCode >= 200 && responseCode <= 299)
+                        || (responseCode >= 400 && responseCode <= 415));
+            } catch (IOException | IllegalArgumentException | InterruptedException e) {
+                urlIsUp = false;
+            }
+        }
     }
 
 }
