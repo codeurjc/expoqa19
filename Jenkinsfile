@@ -15,11 +15,8 @@ node {
        stage("Test") {
            sh "mvn test"
        } 
-    } catch(e){
-        echo 'Err: ' + e.toString()
     } finally {
         sh "docker-compose down"
-          
         junit "target/*-reports/TEST-*.xml"
     }
 }
