@@ -1,5 +1,9 @@
 # Testing cloud and kubernetes applications
 
+Code used in the masterclass "Testing cloud and kubernetes applications" in [ExpoQA event](http://www.expoqa.com) held in Madrid in June 18-19 2019.
+
+[Download slides](https://github.com/codeurjc/expoqa19/blob/master/Testing%20cloud%20and%20Kubernetes%20applications.pdf)
+
 There are 6 git branches with different ways to configure and improve the same basic web application. The application is containerized and has two services, web app container and database container. I has two E2E tests using a web browser with Selenium.
 
 * [Demo 0](https://github.com/codeurjc/expoqa19/tree/demo0): Docker-compose managed app. Tests using browsers installed on Jenkins machine.
