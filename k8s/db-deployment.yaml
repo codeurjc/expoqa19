@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: db
+    io.elastest.service: db
   name: db-deploy
 spec:
   replicas: 1
@@ -11,6 +12,7 @@ spec:
     metadata:
       labels:
         app: db
+        io.elastest.service: db
     spec:
       containers:
       - env:

@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: web
+    io.elastest.service: web
   name: web
 spec:
   replicas: 1
@@ -11,6 +12,7 @@ spec:
     metadata:
       labels:
         app: web
+	    io.elastest.service: web
     spec:
       containers:
       - env:
