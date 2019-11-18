@@ -17,7 +17,7 @@ spec:
         - name: SPRING_DATASOURCE_PASSWORD
           value: pass
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://db/test
+          value: jdbc:mysql://db:33306/test
         - name: SPRING_DATASOURCE_USERNAME
           value: root
         image: expoqa19/webapp2:v1
