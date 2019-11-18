@@ -12,7 +12,7 @@ spec:
     metadata:
       labels:
         app: web
-	    io.elastest.service: web
+        io.elastest.service: web
     spec:
       containers:
       - env:
