@@ -1,5 +1,5 @@
 node {
-    elastest(tss: ['EUS'], surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml', monitoring: true, project: 'ExpoQA19') {
+    withEnv(['ET_SUT_CONTAINER_NAME=sut_' + "${BUILD_ID}-k8s"]) {
         withKubeConfig([credentialsId: 'k8s-api-token', serverUrl: '${K8S_URL}']) {
             try {
                 stage("Preparation") { 
@@ -21,7 +21,7 @@ node {
                     waitForService(5, "http://" + sutIp + ":8080")
                     withEnv(['ET_SUT_HOST=' + sutIp]) {
                         echo "Running test"
-                        sh "mvn test"
+                        sh "mvn test -Dsel.jup.recording=true -Dsel.jup.output.folder=surefire-reports"
                     }
                 }
             

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -26,6 +27,11 @@ import org.slf4j.LoggerFactory;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+import io.github.bonigarcia.seljup.DockerBrowser;
+import io.github.bonigarcia.seljup.SeleniumExtension;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
+
+@ExtendWith(SeleniumExtension.class)
 public class WebAppTest {
     protected final Logger logger = getLogger(lookup().lookupClass());
 
@@ -85,7 +91,8 @@ public class WebAppTest {
     }
 
     @Test
-    public void createMessageTest() throws InterruptedException {
+    public void createMessageTest(@DockerBrowser(type = CHROME) RemoteWebDriver localDriver, TestInfo info)
+            throws InterruptedException, MalformedURLException {
         Thread.sleep(1000);
         driver.get(sutURL);
         LOG.info("Web loaded");
@@ -107,7 +114,8 @@ public class WebAppTest {
     }
 
     @Test
-    public void removeMessageTest() throws InterruptedException {
+    public void removeMessageTest(@DockerBrowser(type = CHROME) RemoteWebDriver localDriver, TestInfo info)
+            throws InterruptedException, MalformedURLException {
 
         driver.get(sutURL);
         LOG.info("Web loaded");
