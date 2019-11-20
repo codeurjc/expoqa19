@@ -3,7 +3,6 @@ package es.codeurjc.test.web;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
@@ -19,17 +18,14 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
+
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.seljup.BrowserType;
 import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumExtension;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
 
 @ExtendWith(SeleniumExtension.class)
 public class WebAppTest {
@@ -38,7 +34,6 @@ public class WebAppTest {
     private static Logger LOG = LoggerFactory.getLogger(WebAppTest.class);
 
     private static String sutURL;
-    private static String eusURL;
 
     private WebDriver driver;
 
@@ -54,31 +49,12 @@ public class WebAppTest {
         System.out.println("App url: " + sutURL);
 
         waitForSut(sutURL);
-
-        eusURL = System.getenv("ET_EUS_API");
-        if (eusURL == null) {
-            WebDriverManager.chromedriver().setup();
-        }
     }
 
     @BeforeEach
     public void setupTest(TestInfo info) throws MalformedURLException {
         String testName = info.getTestMethod().get().getName();
         logger.info("##### Start test: {}", testName);
-
-        String eusURL = System.getenv("ET_EUS_API");
-        if (eusURL == null) {
-            // Local Google Chrome
-            driver = new ChromeDriver();
-        } else {
-            logger.info("Using ElasTest EUS URL: {}", eusURL);
-
-            DesiredCapabilities caps = chrome();
-            caps.setCapability("testName", testName);
-
-            // Selenium Grid in ElasTest
-            driver = new RemoteWebDriver(new URL(eusURL), caps);
-        }
     }
 
     @AfterEach
