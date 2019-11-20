@@ -93,6 +93,8 @@ public class WebAppTest {
     @Test
     public void createMessageTest(@DockerBrowser(type = BrowserType.CHROME) RemoteWebDriver localDriver, TestInfo info)
             throws InterruptedException, MalformedURLException {
+        this.driver = localDriver;
+
         Thread.sleep(1000);
         driver.get(sutURL);
         LOG.info("Web loaded");
@@ -116,6 +118,7 @@ public class WebAppTest {
     @Test
     public void removeMessageTest(@DockerBrowser(type = BrowserType.CHROME) RemoteWebDriver localDriver, TestInfo info)
             throws InterruptedException, MalformedURLException {
+        this.driver = localDriver;
 
         driver.get(sutURL);
         LOG.info("Web loaded");
