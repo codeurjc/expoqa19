@@ -40,9 +40,9 @@ public class WebAppTest {
 
         String sutHost = System.getenv("ET_SUT_HOST");
         if (sutHost == null) {
-            sutURL = "http://localhost:38080/";
+            sutURL = "http://localhost:8080/";
         } else {
-            sutURL = "http://" + sutHost + ":38080/";
+            sutURL = "http://" + sutHost + ":8080/";
         }
         LOG.info("App url: " + sutURL);
         
