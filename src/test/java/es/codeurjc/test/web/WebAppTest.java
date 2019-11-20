@@ -1,8 +1,10 @@
 package es.codeurjc.test.web;
 
+import static io.github.bonigarcia.seljup.BrowserType.CHROME;
 import static java.lang.invoke.MethodHandles.lookup;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
@@ -12,49 +14,39 @@ import java.net.URL;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import io.github.bonigarcia.seljup.BrowserType;
 import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumExtension;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
 
 @ExtendWith(SeleniumExtension.class)
 public class WebAppTest {
-    protected final Logger logger = getLogger(lookup().lookupClass());
-
-    private static Logger LOG = LoggerFactory.getLogger(WebAppTest.class);
+    protected final static Logger LOG = getLogger(lookup().lookupClass());
 
     private static String sutURL;
 
     private WebDriver driver;
 
     @BeforeAll
-    public static void setupClass() throws Exception {
+    public static void setupClass() throws IOException {
 
         String sutHost = System.getenv("ET_SUT_HOST");
         if (sutHost == null) {
-            sutURL = "http://localhost:8080/";
+            sutURL = "http://localhost:38080/";
         } else {
-            sutURL = "http://" + sutHost + ":8080/";
+            sutURL = "http://" + sutHost + ":38080/";
         }
-        System.out.println("App url: " + sutURL);
-
+        LOG.info("App url: " + sutURL);
+        
         waitForSut(sutURL);
-    }
-
-    @BeforeEach
-    public void setupTest(TestInfo info) throws MalformedURLException {
-        String testName = info.getTestMethod().get().getName();
-        logger.info("##### Start test: {}", testName);
     }
 
     @AfterEach
@@ -62,16 +54,15 @@ public class WebAppTest {
         if (driver != null) {
             driver.quit();
         }
-        String testName = info.getTestMethod().get().getName();
-        logger.info("##### Finish test: {}", testName);
     }
-
+    
     @Test
-    public void createMessageTest(@DockerBrowser(type = BrowserType.CHROME) RemoteWebDriver localDriver, TestInfo info)
-            throws InterruptedException, MalformedURLException {
+    public void createMessageTest(
+            @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
+            TestInfo info) throws InterruptedException, MalformedURLException {
+        
         this.driver = localDriver;
-
-        Thread.sleep(1000);
+        
         driver.get(sutURL);
         LOG.info("Web loaded");
         Thread.sleep(3000);
@@ -84,16 +75,18 @@ public class WebAppTest {
         String title = driver.findElement(By.id("title")).getText();
         String body = driver.findElement(By.id("body")).getText();
 
-        assertThat(title).isEqualTo(newTitle);
-        assertThat(body).isEqualTo(newBody);
+        assertEquals(newTitle, title);
+        assertEquals(newBody, body);
         LOG.info("Message verified");
 
         Thread.sleep(2000);
     }
 
     @Test
-    public void removeMessageTest(@DockerBrowser(type = BrowserType.CHROME) RemoteWebDriver localDriver, TestInfo info)
-            throws InterruptedException, MalformedURLException {
+    public void removeMessageTest(
+            @DockerBrowser(type = CHROME) RemoteWebDriver localDriver,
+            TestInfo info) throws InterruptedException, MalformedURLException {
+        
         this.driver = localDriver;
 
         driver.get(sutURL);
@@ -110,14 +103,16 @@ public class WebAppTest {
         Thread.sleep(2000);
 
         try {
-            driver.findElement(By.xpath("//span[contains(text(),'" + newTitle + "')]"));
+            driver.findElement(
+                    By.xpath("//span[contains(text(),'" + newTitle + "')]"));
             fail("Message should be deleted");
         } catch (Exception e) {
             LOG.info("Message deleted");
         }
     }
 
-    private void addMessage(String title, String body) throws InterruptedException {
+    private void addMessage(String title, String body)
+            throws InterruptedException {
 
         driver.findElement(By.id("title-input")).sendKeys(title);
         driver.findElement(By.id("body-input")).sendKeys(body);
@@ -136,13 +131,11 @@ public class WebAppTest {
         URL url = new URL(urlValue);
         int responseCode = 0;
         boolean urlIsUp = false;
-        boolean first = true;
-
+        
         while (!urlIsUp) {
-            LOG.debug(first ? "Checking if SuT {} is ready" : "SUT {} is not ready yet", sutURL);
-            first = false;
+            LOG.debug("SUT {} is not ready yet", sutURL);
             try {
-                Thread.sleep(2000);
+                Thread.sleep(2000);        
                 HttpURLConnection huc = (HttpURLConnection) url.openConnection();
                 huc.setConnectTimeout(2000);
                 responseCode = huc.getResponseCode();
@@ -153,5 +146,4 @@ public class WebAppTest {
             }
         }
     }
-
 }
