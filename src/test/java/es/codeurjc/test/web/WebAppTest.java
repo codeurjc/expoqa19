@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-
+import io.github.bonigarcia.seljup.BrowserType;
 import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumExtension;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
@@ -91,7 +91,7 @@ public class WebAppTest {
     }
 
     @Test
-    public void createMessageTest(@DockerBrowser(type = CHROME) RemoteWebDriver localDriver, TestInfo info)
+    public void createMessageTest(@DockerBrowser(type = BrowserType.CHROME) RemoteWebDriver localDriver, TestInfo info)
             throws InterruptedException, MalformedURLException {
         Thread.sleep(1000);
         driver.get(sutURL);
@@ -114,7 +114,7 @@ public class WebAppTest {
     }
 
     @Test
-    public void removeMessageTest(@DockerBrowser(type = CHROME) RemoteWebDriver localDriver, TestInfo info)
+    public void removeMessageTest(@DockerBrowser(type = BrowserType.CHROME) RemoteWebDriver localDriver, TestInfo info)
             throws InterruptedException, MalformedURLException {
 
         driver.get(sutURL);
