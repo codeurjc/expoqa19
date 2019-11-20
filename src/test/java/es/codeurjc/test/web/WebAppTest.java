@@ -41,12 +41,12 @@ public class WebAppTest {
 
         String sutHost = System.getenv("ET_SUT_HOST");
         if (sutHost == null) {
-            sutURL = "http://localhost:38080/";
+            sutURL = "http://localhost:8080/";
         } else {
-            sutURL = "http://" + sutHost + ":38080/";
+            sutURL = "http://" + sutHost + ":8080/";
         }
         System.out.println("App url: " + sutURL);
-        
+
         waitForSut(sutURL);
 
         eusURL = System.getenv("ET_EUS_API");
@@ -65,6 +65,8 @@ public class WebAppTest {
             // Local Google Chrome
             driver = new ChromeDriver();
         } else {
+            logger.info("Using ElasTest EUS URL: {}", eusURL);
+
             DesiredCapabilities caps = chrome();
             caps.setCapability("testName", testName);
 
@@ -81,8 +83,6 @@ public class WebAppTest {
         String testName = info.getTestMethod().get().getName();
         logger.info("##### Finish test: {}", testName);
     }
-
-
 
     @Test
     public void createMessageTest() throws InterruptedException {
@@ -105,7 +105,7 @@ public class WebAppTest {
 
         Thread.sleep(2000);
     }
-    
+
     @Test
     public void removeMessageTest() throws InterruptedException {
 
@@ -118,20 +118,19 @@ public class WebAppTest {
 
         addMessage(newTitle, newBody);
 
-        driver.findElement(By.id("delete-" + newTitle)).click();
+        driver.findElement(By.id("delete")).click();
         LOG.info("Delete button clicked");
         Thread.sleep(2000);
 
         try {
-            driver.findElement(
-                    By.xpath("//span[contains(text(),'" + newTitle + "')]"));
+            driver.findElement(By.xpath("//span[contains(text(),'" + newTitle + "')]"));
+            fail("Message should be deleted");
         } catch (Exception e) {
             LOG.info("Message deleted");
         }
     }
 
-    private void addMessage(String title, String body)
-            throws InterruptedException {
+    private void addMessage(String title, String body) throws InterruptedException {
 
         driver.findElement(By.id("title-input")).sendKeys(title);
         driver.findElement(By.id("body-input")).sendKeys(body);
@@ -150,11 +149,13 @@ public class WebAppTest {
         URL url = new URL(urlValue);
         int responseCode = 0;
         boolean urlIsUp = false;
-        
+        boolean first = true;
+
         while (!urlIsUp) {
-            LOG.debug("SUT {} is not ready yet", sutURL);
+            LOG.debug(first ? "Checking if SuT {} is ready" : "SUT {} is not ready yet", sutURL);
+            first = false;
             try {
-                Thread.sleep(2000);        
+                Thread.sleep(2000);
                 HttpURLConnection huc = (HttpURLConnection) url.openConnection();
                 huc.setConnectTimeout(2000);
                 responseCode = huc.getResponseCode();
