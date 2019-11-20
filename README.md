@@ -11,4 +11,5 @@ There are 6 git branches with different ways to configure and improve the same b
 * [Demo 2](https://github.com/codeurjc/expoqa19/tree/demo2): Logs archived in ElasticSearch and analyzed with Kibana
 * [Demo 3](https://github.com/codeurjc/expoqa19/tree/demo3): Dockerized browsers with recording for furhter inspection using Selenium Jupiter.
 * [Demo 4](https://github.com/codeurjc/expoqa19/tree/demo4): ElasTest integration
+* [Demo 5](https://github.com/codeurjc/expoqa19/tree/demo5): Kubernetes managed app without ElasTest.
 * [Demo 5](https://github.com/codeurjc/expoqa19/tree/demo5): Kubernetes managed app with ElasTest integration.
