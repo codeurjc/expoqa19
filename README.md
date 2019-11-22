@@ -12,4 +12,5 @@ There are 6 git branches with different ways to configure and improve the same b
 * [Demo 3](https://github.com/codeurjc/expoqa19/tree/demo3): Dockerized browsers with recording for furhter inspection using Selenium Jupiter.
 * [Demo 4](https://github.com/codeurjc/expoqa19/tree/demo4): ElasTest integration
 * [Demo 5](https://github.com/codeurjc/expoqa19/tree/demo5): Kubernetes managed app without ElasTest.
-* [Demo 5](https://github.com/codeurjc/expoqa19/tree/demo5): Kubernetes managed app with ElasTest integration.
+* [Demo 6](https://github.com/codeurjc/expoqa19/tree/demo5): Kubernetes managed app with ElasTest integration.
+* [Demo 6 Fixed Test](https://github.com/codeurjc/expoqa19/tree/demo5): Kubernetes managed app with ElasTest integration and success Test.
