@@ -104,6 +104,8 @@ public class WebAppTest {
         LOG.info("Message verified");
 
         Thread.sleep(2000);
+        LOG.info("Clearing...");
+        deleteMessage();
     }
 
     @Test
@@ -118,9 +120,7 @@ public class WebAppTest {
 
         addMessage(newTitle, newBody);
 
-        driver.findElement(By.id("delete")).click();
-        LOG.info("Delete button clicked");
-        Thread.sleep(2000);
+        deleteMessage();
 
         try {
             driver.findElement(By.xpath("//span[contains(text(),'" + newTitle + "')]"));
@@ -130,7 +130,6 @@ public class WebAppTest {
     }
 
     private void addMessage(String title, String body) throws InterruptedException {
-
         driver.findElement(By.id("title-input")).sendKeys(title);
         driver.findElement(By.id("body-input")).sendKeys(body);
         LOG.info("Form ready");
@@ -141,7 +140,12 @@ public class WebAppTest {
         LOG.info("Form submited");
 
         Thread.sleep(2000);
+    }
 
+    private void deleteMessage() throws InterruptedException {
+        driver.findElement(By.id("delete")).click();
+        LOG.info("Delete button clicked");
+        Thread.sleep(2000);
     }
 
     public static void waitForSut(String urlValue) throws IOException {
