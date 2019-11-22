@@ -105,7 +105,7 @@ public class WebAppTest {
 
         Thread.sleep(2000);
         LOG.info("Clearing...");
-        deleteMessage();
+        deleteMessage(newTitle);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class WebAppTest {
 
         addMessage(newTitle, newBody);
 
-        deleteMessage();
+        deleteMessage(newTitle);
 
         try {
             driver.findElement(By.xpath("//span[contains(text(),'" + newTitle + "')]"));
@@ -142,8 +142,8 @@ public class WebAppTest {
         Thread.sleep(2000);
     }
 
-    private void deleteMessage() throws InterruptedException {
-        driver.findElement(By.id("delete")).click();
+    private void deleteMessage(String title) throws InterruptedException {
+        driver.findElement(By.id("delete-" + title)).click();
         LOG.info("Delete button clicked");
         Thread.sleep(2000);
     }
