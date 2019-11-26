@@ -29,8 +29,13 @@ public class WebAppTest {
 
 	@BeforeAll
 	public static void setupClass() throws IOException {
-
-		sutURL = "http://localhost:38080/";
+		String sutHost = System.getenv("ET_SUT_HOST");
+		if (sutHost == null) {
+			sutURL = "http://localhost:38080/";
+		} else {
+			sutURL = "http://" + sutHost + ":38080/";
+		}
+		logger.info("App url: " + sutURL);
 
 		waitForSut(sutURL);
 
