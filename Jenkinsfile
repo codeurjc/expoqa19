@@ -25,7 +25,7 @@ node {
         sh "docker-compose logs db > db-logs.txt"
         archive "db-logs.txt"
 
-        sh "docker-compose down"
+        sh "docker-compose -p demo1 down"
         junit "target/*-reports/TEST-*.xml"
     }
 }
