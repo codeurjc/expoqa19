@@ -10,7 +10,7 @@ node {
            sh "docker-compose build"
        }
        stage("Start app") {
-           sh "docker-compose up -d"
+           sh "docker-compose up -p demo1 -d"
        }
        stage("Test") {
            sh "mvn test"
