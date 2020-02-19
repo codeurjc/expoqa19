@@ -11,13 +11,13 @@ logstash {
                sh "docker-compose build"
            }
            stage("Start app") {
-               sh "docker-compose up -d"
+               sh "docker-compose -p demo2 up -d"
            }
            stage("Test") {
                sh "mvn test"
            }
         } finally {
-            sh "docker-compose down"
+            sh "docker-compose -p demo2 down"
             junit "target/*-reports/TEST-*.xml"
         }
     }
