@@ -28,9 +28,14 @@ public class WebAppTest {
 	private WebDriver driver;
 
 	@BeforeAll
-	public static void setupClass() throws IOException {
-		sutURL = "http://localhost:38080/";
-
+	public static void setupClass() throws IOException {		
+		String sutHost = System.getenv("ET_SUT_HOST");
+		if (sutHost == null) {
+			sutURL = "http://localhost:38080/";
+		} else {
+			sutURL = "http://" + sutHost + ":38080/";
+		}
+		
 		logger.info("App url: " + sutURL);
 
 		waitForSut(sutURL);
