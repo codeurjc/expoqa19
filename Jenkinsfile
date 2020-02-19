@@ -1,7 +1,6 @@
 logstash {
 	node {
 	    try {
-            withEnv(['ET_SUT_HOST=MYDNS_ORIP']) {
     	    	stage("Preparation") { 
     				git(
     					url: 'https://github.com/codeurjc/expoqa19.git',
@@ -17,7 +16,6 @@ logstash {
     	    	stage("Test") {
     				sh "mvn test -Dsel.jup.recording=true -Dsel.jup.output.folder=surefire-reports"
     	    	} 
-            }
 	    } finally {
 	    	sh "docker-compose -p demo3 down"
 			
