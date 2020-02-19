@@ -29,7 +29,7 @@ public class WebAppTest {
 
 	@BeforeAll
 	public static void setupClass() throws IOException {
-		sutURL = "http://demo1_web_1:8080/";
+		sutURL = "http://localhost:38080/";
 
 		logger.info("App url: " + sutURL);
 
