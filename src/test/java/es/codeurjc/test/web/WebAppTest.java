@@ -124,7 +124,7 @@ public class WebAppTest {
         URL url = new URL(urlValue);
         int responseCode = 0;
         boolean urlIsUp = false;
-        
+        LOG.info("Waiting for Sut at {}", urlValue);
         while (!urlIsUp) {
             LOG.debug("SUT {} is not ready yet", sutURL);
             try {
