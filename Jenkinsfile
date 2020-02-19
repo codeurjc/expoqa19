@@ -12,14 +12,14 @@ logstash {
     				sh "docker-compose build"
     	    	}
     	    	stage("Start app") {
-    				sh "docker-compose up -d"
+    				sh "docker-compose -p demo3 up -d"
     	    	}
     	    	stage("Test") {
     				sh "mvn test -Dsel.jup.recording=true -Dsel.jup.output.folder=surefire-reports"
     	    	} 
             }
 	    } finally {
-	    	sh "docker-compose down"
+	    	sh "docker-compose -p demo3 down"
 			
 			step([
 				$class: 'JUnitResultArchiver', 
