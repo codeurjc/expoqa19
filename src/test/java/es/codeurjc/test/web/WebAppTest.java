@@ -29,7 +29,7 @@ public class WebAppTest {
 
 	@BeforeAll
 	public static void setupClass() throws IOException {
-		String sutHost = "http://demo1_web_1:8080/";
+		String sutURL = "http://demo1_web_1:8080/";
 
 		logger.info("App url: " + sutURL);
 
