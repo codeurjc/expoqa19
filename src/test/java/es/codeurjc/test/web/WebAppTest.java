@@ -29,7 +29,7 @@ public class WebAppTest {
 
 	@BeforeAll
 	public static void setupClass() throws IOException {
-		String sutURL = "http://demo1_web_1:8080/";
+		sutURL = "http://demo1_web_1:8080/";
 
 		logger.info("App url: " + sutURL);
 
@@ -117,7 +117,7 @@ public class WebAppTest {
 		boolean urlIsUp = false;
 
 		while (!urlIsUp) {
-			logger.debug("SUT {} is not ready yet", sutURL);
+			logger.debug("SUT {} is not ready yet", urlValue);
 			try {
 				Thread.sleep(2000);
 				HttpURLConnection huc = (HttpURLConnection) url.openConnection();
