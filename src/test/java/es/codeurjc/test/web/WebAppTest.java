@@ -32,7 +32,6 @@ public class WebAppTest {
     private static Logger LOG = LoggerFactory.getLogger(WebAppTest.class);
 
     private static String sutURL;
-    private static String eusURL;
 
     private WebDriver driver;
 
